@@ -110,17 +110,11 @@ class LCD:
 
         for x in range(1,16):
             ret.append(text[x])
-        #print ''.join(ret)
-        
         ret.append(text[0])
-        return ''.join(ret)
+        ret = ''.join(ret)
+        return ret
 
     def move (self, seconds, text):
-        if text != None:
-            text = self.displace(text)
-        else:
-            print "Error when calling displace"
-            return
         for x in range(seconds*2):
             self.sendText(1,text)
             time.sleep(0.5)
@@ -203,7 +197,7 @@ def main():
         #time.sleep(2)
         text = "flores y helados"
         #lcd.sendText(1,text)
-        lcd.move(16, text)
+        lcd.move(5, text)
         time.sleep(2)
     except Exception,e:
         print e
