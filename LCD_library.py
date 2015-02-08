@@ -29,9 +29,12 @@
 
 #modifications to become a library
 
-#import
-import RPi.GPIO as GPIO
+import DHT
 import time
+import commands
+import RPi.GPIO as GPIO
+
+#Adafruit constants
 
 # Define GPIO to LCD mapping
 LCD_RS = 7
@@ -92,7 +95,7 @@ class LCD:
         # 3: right
         if (len(text)>16):
             print "Text not valid. Longer than 16 characters"
-            return
+            text = 'ERR:line too long'
         rows = {1 : LCD_LINE_1, 2 : LCD_LINE_2}
         self.lcd_byte(rows[row], LCD_CMD)
         self.lcd_string(text,justification)
@@ -191,14 +194,30 @@ def main():
     lcd = LCD()
 
     try:
-        lcd.blight(True) #switches on the backlight
-        #lcd.sendText(1, "center ")
-        #lcd.sendText(2, "left",3)
-        #time.sleep(2)
-        text = "flores y helados"
+        lcd.blight(True)
+        coreTemp = commands.getoutput('vcgencmd measure_temp')
+        armMem = commands.getoutput('vcgencmd get_mem arm')
+        gpuMem = commands.getoutput('vcgencmd get_mem gpu')
+        roomHumid, roomTemp = DHT.readDHTvalues()
+        
+        line = 'T={0:0.1f}, H={1:0.1f}'.format(roomTemp, roomHumid)
+        lcd.sendText(1, "ROOM")
+        lcd.sendText(2, line)
+        time.sleep(5)
+        
+        line = coreTemp
+        lcd.sendText(1, "PI")
+        lcd.sendText(2, line)
+        time.sleep(5)
+        
+        lcd.sendText(1, armMem)
+        lcd.sendText(2, gpuMem)
+        time.sleep(5)
+        
+        #text = "flores y helados"
         #lcd.sendText(1,text)
-        lcd.move(5, text)
-        time.sleep(2)
+        #lcd.move(5, text)
+        #time.sleep(2)
     except Exception,e:
         print e
     finally:
