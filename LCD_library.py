@@ -5,7 +5,7 @@
 #
 # Author : Matt Hawkins
 # Site   : http://www.raspberrypi-spy.co.uk
-# 
+#
 # Date   : 03/08/2012
 #
 
@@ -36,7 +36,7 @@ import time
 # Define GPIO to LCD mapping
 LCD_RS = 7
 LCD_E  = 8
-LCD_D4 = 25 
+LCD_D4 = 25
 LCD_D5 = 24
 LCD_D6 = 23
 LCD_D7 = 18
@@ -48,139 +48,167 @@ LCD_CHR = True
 LCD_CMD = False
 
 LCD_LINE_1 = 0x80 # LCD RAM address for the 1st line
-LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line 
+LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
 
 # Timing constants
 E_PULSE = 0.00005
 E_DELAY = 0.00005
 
 class LCD:
-   
+
     def __init__(self):
-        self.LCD_setup()  
-      
-    def cleanUp(self):
-      GPIO.cleanup()
-      
-    def sendText(self, row, text, justification = 2):
-    #send 'text' to row number 1 or 2
-    # 1 : LCD_LINE_1
-    # 2 : LCD_LINE_2
-    #Justified to:
-    # 2: center
-    # 1: left
-    # 3: right
-      if (len(text)>16):
-        print "Text not valid. Longer than 16 characters"
-        return        
-      rows = {1 : LCD_LINE_1, 2 : LCD_LINE_2}
-      self.lcd_byte(rows[row], LCD_CMD)
-      self.lcd_string(text,justification)
-      
-    def blight(self, state):
-      # Toggle backlight on (state = true) or of (state=false)
-      GPIO.output(LED_ON, state)
-      
+        self.LCD_setup()
+
     def LCD_setup(self):
-      # Main program block
+        GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
+        GPIO.setup(LCD_E, GPIO.OUT)  # E
+        GPIO.setup(LCD_RS, GPIO.OUT) # RS
+        GPIO.setup(LCD_D4, GPIO.OUT) # DB4
+        GPIO.setup(LCD_D5, GPIO.OUT) # DB5
+        GPIO.setup(LCD_D6, GPIO.OUT) # DB6
+        GPIO.setup(LCD_D7, GPIO.OUT) # DB7
+        GPIO.setup(LED_ON, GPIO.OUT) # Backlight enable
 
-      GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
-      GPIO.setup(LCD_E, GPIO.OUT)  # E
-      GPIO.setup(LCD_RS, GPIO.OUT) # RS
-      GPIO.setup(LCD_D4, GPIO.OUT) # DB4
-      GPIO.setup(LCD_D5, GPIO.OUT) # DB5
-      GPIO.setup(LCD_D6, GPIO.OUT) # DB6
-      GPIO.setup(LCD_D7, GPIO.OUT) # DB7
-      GPIO.setup(LED_ON, GPIO.OUT) # Backlight enable
+        # Initialise display
+        self.lcd_byte(0x33,LCD_CMD)
+        self.lcd_byte(0x32,LCD_CMD)
+        self.lcd_byte(0x28,LCD_CMD)
+        self.lcd_byte(0x0C,LCD_CMD)
+        self.lcd_byte(0x06,LCD_CMD)
+        self.lcd_byte(0x01,LCD_CMD)
 
-      # Initialise display
-      self.lcd_byte(0x33,LCD_CMD)
-      self.lcd_byte(0x32,LCD_CMD)
-      self.lcd_byte(0x28,LCD_CMD)
-      self.lcd_byte(0x0C,LCD_CMD)  
-      self.lcd_byte(0x06,LCD_CMD)
-      self.lcd_byte(0x01,LCD_CMD)  
-      
-      self.blight(1)
+        self.blight(1)
+
+    def cleanUp(self):
+        GPIO.cleanup()
+
+    def sendText(self, row, text, justification = 2):
+        #send 'text' to row number 1 or 2
+        # 1 : LCD_LINE_1
+        # 2 : LCD_LINE_2
+        #Justified to:
+        # 2: center
+        # 1: left
+        # 3: right
+        if (len(text)>16):
+            print "Text not valid. Longer than 16 characters"
+            return
+        rows = {1 : LCD_LINE_1, 2 : LCD_LINE_2}
+        self.lcd_byte(rows[row], LCD_CMD)
+        self.lcd_string(text,justification)
+
+    def blight(self, state):
+        # Toggle backlight on (state = true) or of (state=false)
+        GPIO.output(LED_ON, state)
+
+    def displace(self, text):
+        #takes a 16 char string and formats it to show it in movement
+        if len(text) > 16:
+            return
+        ret = []
+        text = list(text)
+
+        for x in range(1,16):
+            ret.append(text[x])
+        #print ''.join(ret)
+        
+        ret.append(text[0])
+        return ''.join(ret)
+
+    def move (self, seconds, text):
+        if text != None:
+            text = self.displace(text)
+        else:
+            print "Error when calling displace"
+            return
+        for x in range(seconds*2):
+            self.sendText(1,text)
+            time.sleep(0.5)
+            text = self.displace(text)
 
     def lcd_string(self,message,style):
-      # Send string to display
-      # style=1 Left justified
-      # style=2 Centred
-      # style=3 Right justified
+        # Send string to display
+        # style=1 Left justified
+        # style=2 Centred
+        # style=3 Right justified
 
-      if style==1:
-        message = message.ljust(LCD_WIDTH," ")  
-      elif style==2:
-        message = message.center(LCD_WIDTH," ")
-      elif style==3:
-        message = message.rjust(LCD_WIDTH," ")
+        if style==1:
+            message = message.ljust(LCD_WIDTH," ")
+        elif style==2:
+            message = message.center(LCD_WIDTH," ")
+        elif style==3:
+            message = message.rjust(LCD_WIDTH," ")
 
-      for i in range(LCD_WIDTH):
-        self.lcd_byte(ord(message[i]),LCD_CHR)
+        for i in range(LCD_WIDTH):
+            self.lcd_byte(ord(message[i]),LCD_CHR)
 
     def lcd_byte(self, bits, mode):
-      # Send byte to data pins
-      # bits = data
-      # mode = True  for character
-      #        False for command
+        # Send byte to data pins
+        # bits = data
+        # mode = True  for character
+        #False for command
 
-      GPIO.output(LCD_RS, mode) # RS
+        GPIO.output(LCD_RS, mode) # RS
 
-      # High bits
-      GPIO.output(LCD_D4, False)
-      GPIO.output(LCD_D5, False)
-      GPIO.output(LCD_D6, False)
-      GPIO.output(LCD_D7, False)
-      if bits&0x10==0x10:
-        GPIO.output(LCD_D4, True)
-      if bits&0x20==0x20:
-        GPIO.output(LCD_D5, True)
-      if bits&0x40==0x40:
-        GPIO.output(LCD_D6, True)
-      if bits&0x80==0x80:
-        GPIO.output(LCD_D7, True)
+        # High bits
+        GPIO.output(LCD_D4, False)
+        GPIO.output(LCD_D5, False)
+        GPIO.output(LCD_D6, False)
+        GPIO.output(LCD_D7, False)
+        if bits&0x10==0x10:
+            GPIO.output(LCD_D4, True)
+        if bits&0x20==0x20:
+            GPIO.output(LCD_D5, True)
+        if bits&0x40==0x40:
+            GPIO.output(LCD_D6, True)
+        if bits&0x80==0x80:
+            GPIO.output(LCD_D7, True)
 
-      # Toggle 'Enable' pin
-      time.sleep(E_DELAY)    
-      GPIO.output(LCD_E, True)  
-      time.sleep(E_PULSE)
-      GPIO.output(LCD_E, False)  
-      time.sleep(E_DELAY)      
+        # Toggle 'Enable' pin
+        time.sleep(E_DELAY)
+        GPIO.output(LCD_E, True)
+        time.sleep(E_PULSE)
+        GPIO.output(LCD_E, False)
+        time.sleep(E_DELAY)
 
-      # Low bits
-      GPIO.output(LCD_D4, False)
-      GPIO.output(LCD_D5, False)
-      GPIO.output(LCD_D6, False)
-      GPIO.output(LCD_D7, False)
-      if bits&0x01==0x01:
-        GPIO.output(LCD_D4, True)
-      if bits&0x02==0x02:
-        GPIO.output(LCD_D5, True)
-      if bits&0x04==0x04:
-        GPIO.output(LCD_D6, True)
-      if bits&0x08==0x08:
-        GPIO.output(LCD_D7, True)
+        # Low bits
+        GPIO.output(LCD_D4, False)
+        GPIO.output(LCD_D5, False)
+        GPIO.output(LCD_D6, False)
+        GPIO.output(LCD_D7, False)
+        if bits&0x01==0x01:
+            GPIO.output(LCD_D4, True)
+        if bits&0x02==0x02:
+            GPIO.output(LCD_D5, True)
+        if bits&0x04==0x04:
+            GPIO.output(LCD_D6, True)
+        if bits&0x08==0x08:
+            GPIO.output(LCD_D7, True)
 
-      # Toggle 'Enable' pin
-      time.sleep(E_DELAY)    
-      GPIO.output(LCD_E, True)  
-      time.sleep(E_PULSE)
-      GPIO.output(LCD_E, False)  
-      time.sleep(E_DELAY)   
-      
+        # Toggle 'Enable' pin
+        time.sleep(E_DELAY)
+        GPIO.output(LCD_E, True)
+        time.sleep(E_PULSE)
+        GPIO.output(LCD_E, False)
+        time.sleep(E_DELAY)
+
 def main():
 
-  lcd = LCD()
-    
-  lcd.blight(True) #switches on the backlight
-  
-  lcd.sendText(1, "texto ")
-  lcd.sendText(2, "de prueba",3)
-  
-  time.sleep(2)
-  
-  lcd.cleanUp()      
+    lcd = LCD()
+
+    try:
+        lcd.blight(True) #switches on the backlight
+        #lcd.sendText(1, "center ")
+        #lcd.sendText(2, "left",3)
+        #time.sleep(2)
+        text = "flores y helados"
+        #lcd.sendText(1,text)
+        lcd.move(16, text)
+        time.sleep(2)
+    except Exception,e:
+        print e
+    finally:
+        lcd.cleanUp()
 
 if __name__ == '__main__':
-  main()
+    main()
