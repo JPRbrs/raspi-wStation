@@ -60,9 +60,9 @@ E_DELAY = 0.00005
 class LCD:
 
     def __init__(self):
-        self.LCD_setup()
+        self._LCD_setup()
 
-    def LCD_setup(self):
+    def _LCD_setup(self):
         GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
         GPIO.setup(LCD_E, GPIO.OUT)  # E
         GPIO.setup(LCD_RS, GPIO.OUT) # RS
@@ -73,38 +73,19 @@ class LCD:
         GPIO.setup(LED_ON, GPIO.OUT) # Backlight enable
 
         # Initialise display
-        self.lcd_byte(0x33,LCD_CMD)
-        self.lcd_byte(0x32,LCD_CMD)
-        self.lcd_byte(0x28,LCD_CMD)
-        self.lcd_byte(0x0C,LCD_CMD)
-        self.lcd_byte(0x06,LCD_CMD)
-        self.lcd_byte(0x01,LCD_CMD)
+        self._lcd_byte(0x33,LCD_CMD)
+        self._lcd_byte(0x32,LCD_CMD)
+        self._lcd_byte(0x28,LCD_CMD)
+        self._lcd_byte(0x0C,LCD_CMD)
+        self._lcd_byte(0x06,LCD_CMD)
+        self._lcd_byte(0x01,LCD_CMD)
 
-        self.blight(1)
+        self.blight(0)
 
-    def cleanUp(self):
+    def _cleanUp(self):
         GPIO.cleanup()
 
-    def sendText(self, row, text, justification = 2):
-        #send 'text' to row number 1 or 2
-        # 1 : LCD_LINE_1
-        # 2 : LCD_LINE_2
-        #Justified to:
-        # 2: center
-        # 1: left
-        # 3: right
-        if (len(text)>16):
-            print "Text not valid. Longer than 16 characters"
-            text = 'ERR:line too long'
-        rows = {1 : LCD_LINE_1, 2 : LCD_LINE_2}
-        self.lcd_byte(rows[row], LCD_CMD)
-        self.lcd_string(text,justification)
-
-    def blight(self, state):
-        # Toggle backlight on (state = true) or of (state=false)
-        GPIO.output(LED_ON, state)
-
-    def displace(self, text):
+    def _displace(self, text):
         #takes a 16 char string and formats it to show it in movement
         if len(text) > 16:
             return
@@ -117,13 +98,7 @@ class LCD:
         ret = ''.join(ret)
         return ret
 
-    def move (self, seconds, text):
-        for x in range(seconds*2):
-            self.sendText(1,text)
-            time.sleep(0.5)
-            text = self.displace(text)
-
-    def lcd_string(self,message,style):
+    def _lcd_string(self,message,style):
         # Send string to display
         # style=1 Left justified
         # style=2 Centred
@@ -137,9 +112,9 @@ class LCD:
             message = message.rjust(LCD_WIDTH," ")
 
         for i in range(LCD_WIDTH):
-            self.lcd_byte(ord(message[i]),LCD_CHR)
+            self._lcd_byte(ord(message[i]),LCD_CHR)
 
-    def lcd_byte(self, bits, mode):
+    def _lcd_byte(self, bits, mode):
         # Send byte to data pins
         # bits = data
         # mode = True  for character
@@ -189,6 +164,31 @@ class LCD:
         GPIO.output(LCD_E, False)
         time.sleep(E_DELAY)
 
+    def sendText(self, row, text, justification = 2):
+        #send 'text' to row number 1 or 2
+        # 1 : LCD_LINE_1
+        # 2 : LCD_LINE_2
+        #Justified to:
+        # 2: center
+        # 1: left
+        # 3: right
+        if (len(text)>16):
+            print "Text not valid. Longer than 16 characters"
+            text = 'ERR:line too long'
+        rows = {1 : LCD_LINE_1, 2 : LCD_LINE_2}
+        self._lcd_byte(rows[row], LCD_CMD)
+        self._lcd_string(text,justification)
+
+    def blight(self, state):
+        # Toggle backlight on (state = true) or of (state=false)
+        GPIO.output(LED_ON, state)
+
+    def move (self, seconds, text):
+        for x in range(seconds*2):
+            self.sendText(1,text)
+            time.sleep(0.5)
+            text = self._displace(text)
+
 def main():
 
     lcd = LCD()
@@ -214,14 +214,14 @@ def main():
         lcd.sendText(2, gpuMem)
         time.sleep(5)
         
-        #text = "flores y helados"
-        #lcd.sendText(1,text)
-        #lcd.move(5, text)
-        #time.sleep(2)
+        text = "texto bailongo  "
+        lcd.sendText(1,text)
+        lcd.move(5, text)
+        time.sleep(2)
     except Exception,e:
         print e
     finally:
-        lcd.cleanUp()
+        lcd._cleanUp()
 
 if __name__ == '__main__':
     main()
