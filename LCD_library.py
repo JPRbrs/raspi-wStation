@@ -31,6 +31,7 @@
 
 import DHT
 import time
+import weather
 import commands
 import RPi.GPIO as GPIO
 
@@ -192,32 +193,42 @@ class LCD:
 def main():
 
     lcd = LCD()
+    weather_dict = weather.get_weather()
 
     try:
         lcd.blight(True)
-        coreTemp = commands.getoutput('vcgencmd measure_temp')
+        """coreTemp = commands.getoutput('vcgencmd measure_temp')
         armMem = commands.getoutput('vcgencmd get_mem arm')
         gpuMem = commands.getoutput('vcgencmd get_mem gpu')
         roomHumid, roomTemp = DHT.readDHTvalues()
-        
+
         line = 'T={0:0.1f}, H={1:0.1f}'.format(roomTemp, roomHumid)
         lcd.sendText(1, "ROOM")
         lcd.sendText(2, line)
         time.sleep(5)
-        
+
         line = coreTemp
         lcd.sendText(1, "PI")
         lcd.sendText(2, line)
         time.sleep(5)
-        
+
         lcd.sendText(1, armMem)
         lcd.sendText(2, gpuMem)
         time.sleep(5)
-        
+
         text = "texto bailongo  "
         lcd.sendText(1,text)
         lcd.move(5, text)
-        time.sleep(2)
+        time.sleep(2)"""
+
+        line1 = "{0:0.1f} C and {1:0.1f}%".format(weather_dict['home_temp'], weather_dict['home_hum'])
+        line2 = "Outside feels %d" % (int(weather_dict['out_feel']))
+        line3 = "It's %s" % (weather_dict['out_conditions'])
+        lcd.sendText(1, line1)
+        lcd.sendText(2, line2)
+        time.sleep(4)
+        lcd.sendText(2, line3)
+
     except Exception,e:
         print e
     finally:
