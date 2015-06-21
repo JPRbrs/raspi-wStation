@@ -193,7 +193,6 @@ class LCD:
 def main():
 
     lcd = LCD()
-    weather_dict = weather.get_weather()
 
     try:
         lcd.blight(True)
@@ -221,16 +220,26 @@ def main():
         lcd.move(5, text)
         time.sleep(2)"""
 
-        line1 = "{0:0.1f} C and {1:0.1f}%".format(weather_dict['home_temp'], weather_dict['home_hum'])
-        line2 = "Outside feels %d" % (int(weather_dict['out_feel']))
-        line3 = "It's %s" % (weather_dict['out_conditions'])
-        lcd.sendText(1, line1)
-        lcd.sendText(2, line2)
-        time.sleep(4)
-        lcd.sendText(2, line3)
+        while True:
+            weather_dict = weather.get_weather()
+            line1 = "{0:0.1f} C and {1:0.1f}%".format(weather_dict['home_temp'], weather_dict['home_hum'])
+            line2 = "Outside feels %d" % (int(weather_dict['out_feel']))
+            if (len(weather_dict['out_conditions']) > 16):
+                line3 = weather_dict['out_conditions'][:16]
+                with open('tooLongWeather.log', 'a') as f:
+                    f.write(weather_dict['out_conditions'])
+            else:
+                line3 = weather_dict['out_conditions']
+            lcd.sendText(1, line1)
+            lcd.sendText(2, line2)
+            time.sleep(10)
+            lcd.sendText(2, line3)
+            time.sleep(10)
 
     except Exception,e:
         print e
+    except KeyboardInterrupt:
+        print 'User interrupted'
     finally:
         lcd._cleanUp()
 
