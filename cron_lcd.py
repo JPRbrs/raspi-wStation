@@ -5,18 +5,19 @@ import time
 import weather
 import commands
 import RPi.GPIO as GPIO
-from LCD_library import LCD
+import LCD_library as LCD
 
 def main():
     GPIO.setwarnings(False)
-    lcd=LCD()
+    lcd=LCD.LCD()
+    lcd.blight(1)
     while(True):
         try:
             weather_dict = weather.get_weather()
             line1 = "{0:0.1f} C and {1:0.1f}%".format(weather_dict['home_temp'], weather_dict['home_hum'])
             line2 = "Outside feels %d" % (int(weather_dict['out_feel']))
             line3 = weather_dict['out_conditions'][:16]
-        
+             
             lcd.sendText(1, line1)
             lcd.sendText(2, line2)
             time.sleep(10)
