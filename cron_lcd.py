@@ -1,14 +1,11 @@
 #!/usr/bin/python
 
-import DHT
 import time
 import weather
-import commands
 import RPi.GPIO as GPIO
 import LCD_library as LCD
 
 def main():
-    GPIO.setwarnings(False)
     lcd=LCD.LCD()
     lcd.blight(1)
     while(True):
@@ -31,8 +28,22 @@ def main():
         except KeyboardInterrupt:
             print 'User interrupted'
             lcd._cleanUp()
-            print "clean"
             quit()
 
 if __name__ == '__main__':
     main()
+
+
+"""OTHER EXAMPLES
+    import commands
+    lcd.blight(True)
+    coreTemp = commands.getoutput('vcgencmd measure_temp')
+    armMem = commands.getoutput('vcgencmd get_mem arm')
+    gpuMem = commands.getoutput('vcgencmd get_mem gpu')
+    roomHumid, roomTemp = DHT.readDHTvalues()
+
+    text = "texto bailongo  "
+    lcd.sendText(1,text)
+    lcd.move(5, text)
+    time.sleep(2)
+"""

@@ -29,10 +29,7 @@
 
 #modifications to become a library
 
-import DHT
 import time
-import weather
-import commands
 import RPi.GPIO as GPIO
 
 #Adafruit constants
@@ -189,59 +186,3 @@ class LCD:
             self.sendText(1,text)
             time.sleep(0.5)
             text = self._displace(text)
-
-def main():
-
-    lcd = LCD()
-
-    try:
-        lcd.blight(True)
-        """coreTemp = commands.getoutput('vcgencmd measure_temp')
-        armMem = commands.getoutput('vcgencmd get_mem arm')
-        gpuMem = commands.getoutput('vcgencmd get_mem gpu')
-        roomHumid, roomTemp = DHT.readDHTvalues()
-
-        line = 'T={0:0.1f}, H={1:0.1f}'.format(roomTemp, roomHumid)
-        lcd.sendText(1, "ROOM")
-        lcd.sendText(2, line)
-        time.sleep(5)
-
-        line = coreTemp
-        lcd.sendText(1, "PI")
-        lcd.sendText(2, line)
-        time.sleep(5)
-
-        lcd.sendText(1, armMem)
-        lcd.sendText(2, gpuMem)
-        time.sleep(5)
-
-        text = "texto bailongo  "
-        lcd.sendText(1,text)
-        lcd.move(5, text)
-        time.sleep(2)"""
-
-        while True:
-            weather_dict = weather.get_weather()
-            line1 = "{0:0.1f} C and {1:0.1f}%".format(weather_dict['home_temp'], weather_dict['home_hum'])
-            line2 = "Outside feels %d" % (int(weather_dict['out_feel']))
-            if (len(weather_dict['out_conditions']) > 16):
-                line3 = weather_dict['out_conditions'][:16]
-                with open('tooLongWeather.log', 'a') as f:
-                    f.write(weather_dict['out_conditions'])
-            else:
-                line3 = weather_dict['out_conditions']
-            lcd.sendText(1, line1)
-            lcd.sendText(2, line2)
-            time.sleep(10)
-            lcd.sendText(2, line3)
-            time.sleep(10)
-
-    except Exception,e:
-        print e
-    except KeyboardInterrupt:
-        print 'User interrupted'
-    finally:
-        lcd._cleanUp()
-
-if __name__ == '__main__':
-    main()
