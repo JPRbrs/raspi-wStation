@@ -27,7 +27,7 @@
 # 15: LCD Backlight +5V**
 # 16: LCD Backlight GND
 
-#modifications to become a library
+# Code was modified to use it as a library
 
 import time
 import RPi.GPIO as GPIO
