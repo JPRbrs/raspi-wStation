@@ -1,3 +1,3 @@
 from DHT import addToDatabase
 
-addToDatabase('ambient.db')
+addToDatabase('/home/pi/git/LCD/ambient.db')

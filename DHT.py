@@ -42,7 +42,7 @@ def addToDatabase(database):
 
 	values = []
 	for x in range(1,8):
-		if x==4:
+		if x == 4:
 			values.append(months[result.group(x)])
 		else:
 			values.append(result.group(x))
@@ -53,3 +53,5 @@ def addToDatabase(database):
 	with lite.connect(database) as con:
 		cur = con.cursor()
 		cur.execute("INSERT INTO DHT_readings VALUES (" + final + ")")
+                print final
+
