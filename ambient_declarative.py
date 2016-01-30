@@ -1,6 +1,6 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
@@ -16,6 +16,11 @@ class Instant(Base):
     id = Column(Integer, primary_key=True)
     temp = Column(Integer, nullable=False)
     hum = Column(Integer, nullable=False)
+    day = Column(Integer, nullable=False)
+    month = Column(Integer, nullable=False)
+    year = Column(Integer, nullable=False)
+    hour = Column(Integer, nullable=False)
+    minute = Column(Integer, nullable=False)
     
 # Create an engine that stores data in the local directory's
 # sqlalchemy_example.db file.

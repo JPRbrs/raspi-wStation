@@ -13,7 +13,8 @@ def readDHTvalues():
 
     return (humidity, temperature)
 
-def addToDatabase(database):
+def requestData():
+# Returns a dictionary with all the data corresponding to a db enrty (an Instant)
 	import sqlite3 as lite
 	import sys
 	import re
@@ -37,21 +38,17 @@ def addToDatabase(database):
 	line = 'T={0:0.1f}, H={1:0.1f}'.format(t, h)
 	line = line +time.strftime(", %d-%b-%Y, %H.%M.%S")
 
+        # temp, hum, day, month, year, hour, minute
 	pattern = "T=(\d+\.\d),\ H=(\d+.\d),\ (\d+)-(\w{3})-(\d{4}),\ (\d+).(\d+).\d+"
 	result = re.search(pattern, line)
 
-	values = []
-	for x in range(1,8):
-		if x == 4:
-			values.append(months[result.group(x)])
-		else:
-			values.append(result.group(x))
+	values = {}
+        values['temp'] = result.group(1)
+        values['hum'] = result.group(2)
+        values['day'] = result.group(3)
+        values['month'] = months[result.group(4)]
+        values['year'] = result.group(5)
+        values['hour'] = result.group(6)
+        values['minute'] = result.group(7)
 
-
-	final = ','.join((map(str,values)))
-
-	with lite.connect(database) as con:
-		cur = con.cursor()
-		cur.execute("INSERT INTO DHT_readings VALUES (" + final + ")")
-                print final
-
+        return values
