@@ -13,7 +13,7 @@ Base = declarative_base()
 class Instant(Base):
     __tablename__ = 'measurements'
     #Define columns
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     temp = Column(Integer, nullable=False)
     hum = Column(Integer, nullable=False)
     day = Column(Integer, nullable=False)
