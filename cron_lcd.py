@@ -1,21 +1,25 @@
 #!/usr/bin/python
-
+"""
+script to feed the LCD from a cronjob
+"""
 import time
 import commands
+import DHT
 import weather
-import RPi.GPIO as GPIO
-import LCD_library as LCD
+import LCD as LCD
 
 def main():
     lcd=LCD.LCD()
     lcd.blight(1)
     while(True):
         try:
+            home_conditions = DHT.readDHTvalues()
+            line1 = "{0:0.1f} C and {1:0.1f}%".format(home_conditions[0], home_conditions[1])
+
             weather_dict = weather.get_weather()
-            line1 = "{0:0.1f} C and {1:0.1f}%".format(weather_dict['home_temp'], weather_dict['home_hum'])
             line2 = "Outside feels %d" % (int(weather_dict['out_feel']))
             line3 =  "Rpi " + commands.getoutput('vcgencmd measure_temp')
-             
+            
             lcd.sendText(1, line1)
             lcd.sendText(2, line2)
             time.sleep(10)
