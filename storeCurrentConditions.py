@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from ambient_declarative import Instant, Base
 from DHT import requestData
 
-database = 'home/git/lcd/ambient_readings.db'
+database = '/home/git/lcd/ambient_readings.db'
 
 engine = create_engine('sqlite:///' + database)
 
