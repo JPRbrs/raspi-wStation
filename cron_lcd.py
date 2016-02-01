@@ -14,17 +14,15 @@ def main():
     while(True):
         try:
             home_conditions = DHT.requestData()
-            line1 = "{0:0.1f} C and {1:0.1f}%".format(home_conditions[0], home_conditions[1])
-            print line1
+            line1 = "{0:0.1f} C and {1:0.1f}%".format(home_conditions['temp'], home_conditions['hum'])
 
             weather_dict = weather.get_weather()
             line2 = "Outside feels %d" % (int(weather_dict['out_feel']))
             line3 =  "Rpi " + commands.getoutput('vcgencmd measure_temp')
-            print line2
-            print line3
             
             lcd.sendText(1, line1)
             lcd.sendText(2, line2)
+
             time.sleep(10)
             lcd.sendText(1, line1)
             lcd.sendText(2, line3)
