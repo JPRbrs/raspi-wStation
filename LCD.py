@@ -29,6 +29,7 @@
 
 # Code was modified to use it as a library
 
+import sys
 import time
 import RPi.GPIO as GPIO
 
@@ -186,3 +187,16 @@ class LCD:
             self.sendText(1,text)
             time.sleep(0.5)
             text = self._displace(text)
+
+if __name__ == "__main__":
+# If called from the command line LCD switches on/off depending on the paramter
+# passed
+    if (len(sys.argv) != 2) or (sys.argv[1] not in ('0','1')):
+        print "Usage: sudo python LCD command\nWhere command = 1  on and command = 0 off"
+        quit()
+    GPIO.setwarnings(False)
+    lcd= LCD()
+    if sys.argv[1] == '0':
+        lcd._cleanUp()
+    else:
+        lcd.blight(1)
