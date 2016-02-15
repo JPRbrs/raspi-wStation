@@ -5,7 +5,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from sqlalchemy import create_engine
 
-database = 'ambient_readings.db'
+database = '/home/pi/git/LCD/ambient_readings.db'
 
 
 Base = declarative_base()
