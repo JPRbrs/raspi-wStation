@@ -26,5 +26,9 @@ def requestData():
 
     return values
 
+def requestTemperatureAndHumidity():
+    h,t = read_retry(sensor, pin)
+    return round(t,1) ,round(h,1)
+
 if __name__ == "__main__":
     print requestData()
