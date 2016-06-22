@@ -59,9 +59,6 @@ E_DELAY = 0.00005
 class LCD:
 
     def __init__(self):
-        self._LCD_setup()
-
-    def _LCD_setup(self):
         GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
         GPIO.setup(LCD_E, GPIO.OUT)  # E
         GPIO.setup(LCD_RS, GPIO.OUT) # RS
@@ -87,7 +84,9 @@ class LCD:
     def _displace(self, text):
         #takes a 16 char string and formats it to show it in movement
         if len(text) > 16:
+            print ('String cannot be longer than 16 characters')
             return
+ 
         ret = []
         text = list(text)
 
@@ -99,10 +98,6 @@ class LCD:
 
     def _lcd_string(self,message,style):
         # Send string to display
-        # style=1 Left justified
-        # style=2 Centred
-        # style=3 Right justified
-
         if style==1:
             message = message.ljust(LCD_WIDTH," ")
         elif style==2:
@@ -117,7 +112,7 @@ class LCD:
         # Send byte to data pins
         # bits = data
         # mode = True  for character
-        #False for command
+        #        False for command
 
         GPIO.output(LCD_RS, mode) # RS
 
@@ -164,13 +159,8 @@ class LCD:
         time.sleep(E_DELAY)
 
     def sendText(self, row, text, justification = 2):
-        #send 'text' to row number 1 or 2
-        # 1 : LCD_LINE_1
-        # 2 : LCD_LINE_2
-        #Justified to:
-        # 2: center
-        # 1: left
-        # 3: right
+        # ROW: send 'text' to row number 1 or 2
+        # Justification: left(1), center(2), (3)right
         if (len(text)>16):
             print "Text not valid. Longer than 16 characters"
             text = 'ERR:line too long'
