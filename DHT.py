@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.7
 """
 Requests the DHT data (temperature and humidity) and returns a dictionary with those values
 plus a timestamp to be stored in the database
@@ -17,7 +17,7 @@ def requestData():
 # Returns a dictionary with all the data corresponding to a db entry (an Instant)
     h,t = read_retry(sensor, pin)
     current_time = time.strftime("%d.%m.%Y.%H.%M").split('.')
-        
+
     values = {}
     values['temp'], values['hum'] = get_temp_and_hum()
     values['day'] = current_time[0]

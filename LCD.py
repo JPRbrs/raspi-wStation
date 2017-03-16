@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 #
 # HD44780 LCD Test Script for
 # Raspberry Pi
@@ -17,8 +17,7 @@
 # 5 : R/W (Read Write)       - GROUND THIS PIN
 # 6 : Enable or Strobe
 # 7 : Data Bit 0             - NOT USED
-# 8 : Data Bit 1             - NOT USED
-# 9 : Data Bit 2             - NOT USED
+# 8 : Data Bit 1             - NOT USED# 9 : Data Bit 2             - NOT USED
 # 10: Data Bit 3             - NOT USED
 # 11: Data Bit 4
 # 12: Data Bit 5
@@ -86,7 +85,7 @@ class LCD:
         if len(text) > 16:
             print ('String cannot be longer than 16 characters')
             return
- 
+
         ret = []
         text = list(text)
 

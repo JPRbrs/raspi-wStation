@@ -1,3 +1,5 @@
+#!/usr/bin/env python2.7
+
 """source:
    https://code.google.com/p/python-weather-api/wiki/Examples#Weather.com
 """
@@ -8,12 +10,12 @@ def get_weather():
 # Returns a dict with two keys: out_feel and out_conditions
     retval = {}
 
-    weather = pywapi.get_weather_from_weather_com('BS3:4:UK')
+    weather = pywapi.get_weather_from_weather_com('BS16:4:UK')
     retval['out_feel'] = weather['current_conditions']['feels_like']
     retval['out_conditions'] = weather['current_conditions']['text'].lower()
 
     return retval
-    
+
 def main():
     weather = get_weather()
 

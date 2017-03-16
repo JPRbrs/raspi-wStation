@@ -1,8 +1,8 @@
-#!/usr/bin/python
+#!/usr/bin/env python2.7
 """
 script to feed the LCD from a cronjob
 """
-import time
+from datetime import datetime
 import commands
 import DHT
 import weather
@@ -11,30 +11,31 @@ import LCD as LCD
 def main():
     lcd=LCD.LCD()
     lcd.blight(1)
-    while(True):
-        try:
-            home_conditions = DHT.requestData()
-            line1 = "{0:0.1f} C and {1:0.1f}%".format(home_conditions['temp'], home_conditions['hum'])
+    try:
+        home_conditions = DHT.requestData()
+        time = datetime.now().strftime('%H:%M')
+        weather_dict = weather.get_weather()
 
-            weather_dict = weather.get_weather()
-            line2 = "Outside feels %d" % (int(weather_dict['out_feel']))
-            line3 =  "Rpi " + commands.getoutput('vcgencmd measure_temp')
-            
-            lcd.sendText(1, line1)
-            lcd.sendText(2, line2)
 
-            time.sleep(10)
-            lcd.sendText(1, line1)
-            lcd.sendText(2, line3)
-            time.sleep(10)
-        except Exception,e:
-            print e
-            lcd._cleanUp()
-            quit()
-        except KeyboardInterrupt:
-            print 'User interrupted'
-            lcd._cleanUp()
-            quit()
+        line1 = "{0:0.1f} C and {1:0.1f}%".format(
+            home_conditions['temp'],
+            home_conditions['hum']
+        )
+
+        line2 = time + " Feels %d" % (
+            int(weather_dict['out_feel'])
+        )
+
+        lcd.sendText(1, line1)
+        lcd.sendText(2, line2)
+    except Exception,e:
+        print e
+        lcd._cleanUp()
+        quit()
+    except KeyboardInterrupt:
+        print 'User interrupted'
+        lcd._cleanUp()
+        quit()
 
 if __name__ == '__main__':
     main()
