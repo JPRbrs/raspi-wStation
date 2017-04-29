@@ -12,7 +12,7 @@ def disable_backlight():
 
 def display_text():
     if sys.argv[2]:
-        lcd.send_text(sys.argv[2])
+        lcd.sendText(sys.argv[2])
     else:
         print "Error: text required"
         quit()
