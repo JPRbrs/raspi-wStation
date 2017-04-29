@@ -1,4 +1,3 @@
-
 #!/usr/bin/python2.7
 #
 # HD44780 LCD Test Script for
@@ -29,15 +28,12 @@
 
 # Code was modified to use it as a library
 
-import sys
 import time
 import RPi.GPIO as GPIO
 
-#Adafruit constants
-
 # Define GPIO to LCD mapping
-LCD_RS= 7
-LCD_E  = 8
+LCD_RS = 7
+LCD_E = 8
 LCD_D4 = 25
 LCD_D5 = 24
 LCD_D6 = 23
@@ -49,64 +45,38 @@ LCD_WIDTH = 16    # Maximum characters per line
 LCD_CHR = True
 LCD_CMD = False
 
-LCD_LINE_1 = 0x80 # LCD RAM address for the 1st line
-LCD_LINE_2 = 0xC0 # LCD RAM address for the 2nd line
+# LCD RAM address for the 2 lines
+LCD_LINE_1 = 0x80
+LCD_LINE_2 = 0xC0
 
 # Timing constants
 E_PULSE = 0.00005
 E_DELAY = 0.00005
 
-class LCD:
 
+class LCD:
     def __init__(self):
-        GPIO.setmode(GPIO.BCM)       # Use BCM GPIO numbers
-        GPIO.setup(LCD_E, GPIO.OUT)  # E
-        GPIO.setup(LCD_RS, GPIO.OUT) # RS
-        GPIO.setup(LCD_D4, GPIO.OUT) # DB4
-        GPIO.setup(LCD_D5, GPIO.OUT) # DB5
-        GPIO.setup(LCD_D6, GPIO.OUT) # DB6
-        GPIO.setup(LCD_D7, GPIO.OUT) # DB7
-        GPIO.setup(LED_ON, GPIO.OUT) # Backlight enable
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)        # Use BCM GPIO numbers
+        GPIO.setup(LCD_E, GPIO.OUT)   # E
+        GPIO.setup(LCD_RS, GPIO.OUT)  # RS
+        GPIO.setup(LCD_D4, GPIO.OUT)  # DB4
+        GPIO.setup(LCD_D5, GPIO.OUT)  # DB5
+        GPIO.setup(LCD_D6, GPIO.OUT)  # DB6
+        GPIO.setup(LCD_D7, GPIO.OUT)  # DB7
+        GPIO.setup(LED_ON, GPIO.OUT)  # Backlight enable
 
         # Initialise display
-        self._lcd_byte(0x33,LCD_CMD)
-        self._lcd_byte(0x32,LCD_CMD)
-        self._lcd_byte(0x28,LCD_CMD)
-        self._lcd_byte(0x0C,LCD_CMD)
-        self._lcd_byte(0x06,LCD_CMD)
-        self._lcd_byte(0x01,LCD_CMD)
-
+        self._lcd_byte(0x33, LCD_CMD)
+        self._lcd_byte(0x32, LCD_CMD)
+        self._lcd_byte(0x28, LCD_CMD)
+        self._lcd_byte(0x0C, LCD_CMD)
+        self._lcd_byte(0x06, LCD_CMD)
+        self._lcd_byte(0x01, LCD_CMD)
         self.blight(0)
 
     def _cleanUp(self):
         GPIO.cleanup()
-
-    def _displace(self, text):
-        #takes a 16 char string and formats it to show it in movement
-        if len(text) > 16:
-            print ('String cannot be longer than 16 characters')
-            return
-
-        ret = []
-        text = list(text)
-
-        for x in range(1,16):
-            ret.append(text[x])
-        ret.append(text[0])
-        ret = ''.join(ret)
-        return ret
-
-    def _lcd_string(self,message,style):
-        # Send string to display
-        if style==1:
-            message = message.ljust(LCD_WIDTH," ")
-        elif style==2:
-            message = message.center(LCD_WIDTH," ")
-        elif style==3:
-            message = message.rjust(LCD_WIDTH," ")
-
-        for i in range(LCD_WIDTH):
-            self._lcd_byte(ord(message[i]),LCD_CHR)
 
     def _lcd_byte(self, bits, mode):
         # Send byte to data pins
@@ -114,20 +84,20 @@ class LCD:
         # mode = True  for character
         #        False for command
 
-        GPIO.output(LCD_RS, mode) # RS
+        GPIO.output(LCD_RS, mode)  # RS
 
         # High bits
         GPIO.output(LCD_D4, False)
         GPIO.output(LCD_D5, False)
         GPIO.output(LCD_D6, False)
         GPIO.output(LCD_D7, False)
-        if bits&0x10==0x10:
+        if bits & 0x10 == 0x10:
             GPIO.output(LCD_D4, True)
-        if bits&0x20==0x20:
+        if bits & 0x20 == 0x20:
             GPIO.output(LCD_D5, True)
-        if bits&0x40==0x40:
+        if bits & 0x40 == 0x40:
             GPIO.output(LCD_D6, True)
-        if bits&0x80==0x80:
+        if bits & 0x80 == 0x80:
             GPIO.output(LCD_D7, True)
 
         # Toggle 'Enable' pin
@@ -142,13 +112,13 @@ class LCD:
         GPIO.output(LCD_D5, False)
         GPIO.output(LCD_D6, False)
         GPIO.output(LCD_D7, False)
-        if bits&0x01==0x01:
+        if bits & 0x01 == 0x01:
             GPIO.output(LCD_D4, True)
-        if bits&0x02==0x02:
+        if bits & 0x02 == 0x02:
             GPIO.output(LCD_D5, True)
-        if bits&0x04==0x04:
+        if bits & 0x04 == 0x04:
             GPIO.output(LCD_D6, True)
-        if bits&0x08==0x08:
+        if bits & 0x08 == 0x08:
             GPIO.output(LCD_D7, True)
 
         # Toggle 'Enable' pin
@@ -158,35 +128,53 @@ class LCD:
         GPIO.output(LCD_E, False)
         time.sleep(E_DELAY)
 
-    def sendText(self, row, text, justification = 2):
+    def _displace(self, text):
+        # takes a 16 char string and formats it to show it in movement
+        if len(text) > 16:
+            print ('String cannot be longer than 16 characters')
+            return
+
+        ret = []
+        text = list(text)
+
+        for x in range(1, 16):
+            ret.append(text[x])
+        ret.append(text[0])
+        ret = ''.join(ret)
+        return ret
+
+    def _lcd_string(self, message, style):
+        # Send string to display
+        if style == 1:
+            message = message.ljust(LCD_WIDTH, " ")
+        elif style == 2:
+            message = message.center(LCD_WIDTH, " ")
+        elif style == 3:
+            message = message.rjust(LCD_WIDTH, " ")
+
+        for i in range(LCD_WIDTH):
+            self._lcd_byte(ord(message[i]), LCD_CHR)
+        
+    def sendText(self, row, text, justification=2):
         # ROW: send 'text' to row number 1 or 2
         # Justification: left(1), center(2), (3)right
-        if (len(text)>16):
+        if (len(text) > 16):
             print "Text not valid. Longer than 16 characters"
             text = 'ERR:line too long'
-        rows = {1 : LCD_LINE_1, 2 : LCD_LINE_2}
+        rows = {
+            1: LCD_LINE_1,
+            2: LCD_LINE_2
+        }
         self._lcd_byte(rows[row], LCD_CMD)
-        self._lcd_string(text,justification)
+        self._lcd_string(text, justification)
 
     def blight(self, state):
         # Toggle backlight on (state = true) or of (state=false)
         GPIO.output(LED_ON, state)
 
-    def move (self, seconds, text):
+    def move(self, seconds, text):
         for x in range(seconds*2):
-            self.sendText(1,text)
+            self.sendText(1, text)
             time.sleep(0.5)
             text = self._displace(text)
 
-if __name__ == "__main__":
-# If called from the command line LCD switches on/off depending on the paramter
-# passed
-    if (len(sys.argv) != 2) or (sys.argv[1] not in ('0','1')):
-        print "Usage: sudo python LCD command\nWhere command = 1  on and command = 0 off"
-        quit()
-    GPIO.setwarnings(False)
-    lcd= LCD()
-    if sys.argv[1] == '0':
-        lcd._cleanUp()
-    else:
-        lcd.blight(1)
