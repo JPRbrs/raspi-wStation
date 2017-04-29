@@ -11,11 +11,12 @@ def disable_backlight():
 
 
 def display_text():
-    if sys.argv[2]:
-        lcd.sendText(sys.argv[2])
-    else:
+    if not sys.argv[2]:
         print "Error: text required"
         quit()
+    enable_backlight()
+    print ("printing {}...".format(sys.argv[2]))
+    lcd.sendText(sys.argv[2])
 
 
 if __name__ == "__main__":
