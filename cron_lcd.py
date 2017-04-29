@@ -3,19 +3,18 @@
 script to feed the LCD from a cronjob
 """
 from datetime import datetime
-import commands
 import DHT
 import weather
 import LCD as LCD
 
+
 def main():
-    lcd=LCD.LCD()
+    lcd = LCD.LCD()
     lcd.blight(1)
     try:
         home_conditions = DHT.requestData()
         time = datetime.now().strftime('%H:%M')
         weather_dict = weather.get_weather()
-
 
         line1 = "{0:0.1f} C and {1:0.1f}%".format(
             home_conditions['temp'],
@@ -28,7 +27,7 @@ def main():
 
         lcd.sendText(1, line1)
         lcd.sendText(2, line2)
-    except Exception,e:
+    except Exception, e:
         print e
         lcd._cleanUp()
         quit()
@@ -36,6 +35,7 @@ def main():
         print 'User interrupted'
         lcd._cleanUp()
         quit()
+
 
 if __name__ == '__main__':
     main()

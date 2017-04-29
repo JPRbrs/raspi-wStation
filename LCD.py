@@ -1,3 +1,4 @@
+
 #!/usr/bin/python2.7
 #
 # HD44780 LCD Test Script for
@@ -35,7 +36,7 @@ import RPi.GPIO as GPIO
 #Adafruit constants
 
 # Define GPIO to LCD mapping
-LCD_RS = 7
+LCD_RS= 7
 LCD_E  = 8
 LCD_D4 = 25
 LCD_D5 = 24
