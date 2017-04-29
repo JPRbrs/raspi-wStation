@@ -10,11 +10,23 @@ def disable_backlight():
     lcd._cleanUp()
 
 
-def display_text():
-    if sys.argv[2]:
-        lcd.sendText(sys.argv[2])
-    else:
+def display_message():
+    if not sys.argv[2]:
         print "Error: text required"
+        quit()
+    message = sys.argv[2]
+    message_length = len(str(sys.argv[2]))
+    print ("printing {}...".format(sys.argv[2]))
+
+    enable_backlight()
+
+    if message_length > 0 and message_length < 16:
+        lcd.sendText(message)
+    elif message_length > 16 and message_length < 31:
+        lcd.sendText(message[0:15], 1)
+        lcd.sendText(message[15:len(message)], 2)
+    else:
+        print("message too long, consider texting her")
         quit()
 
 
@@ -36,8 +48,9 @@ if __name__ == "__main__":
         'off':  disable_backlight,
         'text': display_text,
         'text_2': display_text_row_2
+        'text': display_message,
     }
-    
+
     if sys.argv[1] not in actions.keys():
         print "Available options: on, off, text, text_2"
         quit()

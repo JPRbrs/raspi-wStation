@@ -174,7 +174,7 @@ class LCD:
 
     def move(self, seconds, text):
         for x in range(seconds*2):
-            self.sendText(1, text)
+            self.sendText(text, 1)
             time.sleep(0.5)
             text = self._displace(text)
 
