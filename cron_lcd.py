@@ -5,11 +5,11 @@ script to feed the LCD from a cronjob
 from datetime import datetime
 import DHT
 import weather
-import LCD as LCD
+from lcd import LCD
 
 
 def main():
-    lcd = LCD.LCD()
+    lcd = LCD()
     lcd.blight(1)
     try:
         home_conditions = DHT.requestData()

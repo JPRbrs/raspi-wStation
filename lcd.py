@@ -154,7 +154,7 @@ class LCD:
 
         for i in range(LCD_WIDTH):
             self._lcd_byte(ord(message[i]), LCD_CHR)
-        
+
     def sendText(self, text, row=1, justification=2):
         # ROW: send 'text' to row number 1 or 2
         # Justification: left(1), center(2), (3)right
@@ -177,4 +177,3 @@ class LCD:
             self.sendText(text, 1)
             time.sleep(0.5)
             text = self._displace(text)
-
