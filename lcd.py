@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python
 #
 # HD44780 LCD Test Script for
 # Raspberry Pi

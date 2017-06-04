@@ -1,4 +1,4 @@
-#!/usr/bin/env python2.7
+#!/usr/bin/python
 """
 script to feed the LCD from a cronjob
 """
@@ -15,7 +15,7 @@ def main():
         home_conditions = DHT.requestData()
         time = datetime.now().strftime('%H:%M')
         weather_dict = weather.get_weather()
-
+        import pdb; pdb.set_trace()
         line1 = "{0:0.1f} C and {1:0.1f}%".format(
             home_conditions['temp'],
             home_conditions['hum']
@@ -24,9 +24,9 @@ def main():
         line2 = time + " Feels %d" % (
             int(weather_dict['out_feel'])
         )
-
-        lcd.sendText(1, line1)
-        lcd.sendText(2, line2)
+        
+        lcd.sendText(line1, 1)
+        lcd.sendText(line2, 2)
     except Exception, e:
         print e
         lcd._cleanUp()
