@@ -75,7 +75,7 @@ class LCD:
         self._lcd_byte(0x01, LCD_CMD)
         self.blight(0)
 
-    def _cleanUp(self):
+    def _clean_up(self):
         GPIO.cleanup()
 
     def _lcd_byte(self, bits, mode):
@@ -155,7 +155,7 @@ class LCD:
         for i in range(LCD_WIDTH):
             self._lcd_byte(ord(message[i]), LCD_CHR)
 
-    def sendText(self, text, row=1, justification=2):
+    def send_text(self, text, row=1, justification=2):
         # ROW: send 'text' to row number 1 or 2
         # Justification: left(1), center(2), (3)right
         if (len(text) > 16):
@@ -165,15 +165,14 @@ class LCD:
             1: LCD_LINE_1,
             2: LCD_LINE_2
         }
-        self._lcd_byte(rows[row], LCD_CMD)
+        self._lcd_byte(rows.get(row, 1), LCD_CMD)
         self._lcd_string(text, justification)
 
     def blight(self, state):
-        # Toggle backlight on (state = true) or of (state=false)
         GPIO.output(LED_ON, state)
 
     def move(self, seconds, text):
         for x in range(seconds*2):
-            self.sendText(text, 1)
+            self.send_text(text, 1)
             time.sleep(0.5)
             text = self._displace(text)
