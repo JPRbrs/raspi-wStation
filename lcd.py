@@ -73,7 +73,6 @@ class LCD:
         self._lcd_byte(0x0C, LCD_CMD)
         self._lcd_byte(0x06, LCD_CMD)
         self._lcd_byte(0x01, LCD_CMD)
-        self.blight(0)
 
     def _clean_up(self):
         GPIO.cleanup()
