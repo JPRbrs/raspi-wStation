@@ -1,5 +1,4 @@
 import requests
-import json
 from secrets import (
     bus_API,
     portcullis
