@@ -20,16 +20,18 @@ def check_time_within_range(start_hour, end_hour):
 
 
 def check_line_length(line):
-    def func_wrapper(name):
+    def func_wrapper():
         """ Check line is no longer than 16 chars
         """
+        print line
+        print type(line)
         if len(line >= 16):
             return False
         return line
     return func_wrapper
 
 
-@check_line_length
+# @check_line_lenght
 def get_home_conditions():
     """
     Returns a line ready for the LCD with
@@ -42,21 +44,17 @@ def get_home_conditions():
     )
 
 
-@check_line_length
+# @check_line_lenght
 def get_weather():
     """
     Returns a line ready for the LCD with
     outside weather conditions
     """
     weather_dict = weather.get_weather()
-    # buses = get_next_bus(portcullis, 2)
-    line1 = "{0:0.1f} C and {1:0.1f}%".format(
-        home_conditions['temp'],
-        home_conditions['hum']
-    )
+    return "It feels {}".format(weather_dict['out_feel'])
+    
 
-
-@check_line_length
+# @check_line_lenght
 def get_buses():
     """
     Returns a line ready fro the LCD with
@@ -73,10 +71,10 @@ def get_buses():
 def main():
     try:
         lcd = LCD()
-        lcd.send_text(get_home_conditions, 1)
-        lcd.send_text(get_weather, 2)
+        lcd.send_text(get_home_conditions(), 1)
+        lcd.send_text(get_weather(), 2)
         sleep(30)
-        # lcd.send_text(get_buses, 2)
+        # lcd.send_text(get_buses(), 2)
         sleep(30)
     except Exception, e:
         print e
