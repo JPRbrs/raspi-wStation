@@ -12,7 +12,7 @@ def main():
     home_conditions = DHT.requestData()
     time = datetime.now().strftime('%H:%M')
     weather_dict = weather.get_weather()
-    buses = get_next_bus(portcullis, 2)
+    # buses = get_next_bus(portcullis, 2)
     line1 = "{0:0.1f} C and {1:0.1f}%".format(
         home_conditions['temp'],
         home_conditions['hum']
@@ -20,24 +20,24 @@ def main():
     line2 = time + " Feels %d" % (
         int(weather_dict['out_feel'])
     )
-    line3 = '{}: {}'.format(buses[0][0], buses[0][1])
-    line4 = '{}: {}'.format(buses[1][0], buses[1][1])
+    # line3 = '{}: {}'.format(buses[0][0], buses[0][1])
+    # line4 = '{}: {}'.format(buses[1][0], buses[1][1])
 
     try:
         lcd = LCD()
         sleep(0.5)
         lcd.send_text(line1, 1)
         lcd.send_text(line2, 2)
-        sleep(15)
-        lcd.send_text(time, 1)
-        lcd.send_text(line3, 2)
-        sleep(15)
-        lcd.send_text(line1, 1)
-        lcd.send_text(line2, 2)
-        sleep(15)
-        lcd.send_text(time, 1)
-        lcd.send_text(line4, 2)
-        sleep(15)
+        # sleep(15)
+        # lcd.send_text(time, 1)
+        # lcd.send_text(line3, 2)
+        # sleep(15)
+        # lcd.send_text(line1, 1)
+        # lcd.send_text(line2, 2)
+        # sleep(15)
+        # lcd.send_text(time, 1)
+        # lcd.send_text(line4, 2)
+        # sleep(15)
     except Exception, e:
         print e
         lcd._clean_up()
