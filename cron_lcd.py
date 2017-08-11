@@ -52,7 +52,7 @@ def get_weather():
     """
     weather_dict = weather.get_weather()
     return "It feels {}".format(weather_dict['out_feel'])
-    
+
 
 # @check_line_lenght
 def get_buses():
@@ -68,14 +68,15 @@ def get_buses():
         buses[1][1]
     )
 
+
 def main():
     try:
         lcd = LCD()
         lcd.send_text(get_home_conditions(), 1)
         lcd.send_text(get_weather(), 2)
-        sleep(30)
+        # sleep(30)
         # lcd.send_text(get_buses(), 2)
-        sleep(30)
+        # sleep(30)
     except Exception, e:
         print e
         lcd._clean_up()
