@@ -8,3 +8,13 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+
+
+class Instant(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    temperature = db.Column(db.Float, nullable=False)
+    humidity = db.Column(db.Float, nullable=False)
+    timestamp = db.Column(db.String(25), nullable=False)
+
+    def __repr__(self):
+        return '<Instant: {}>'.format(self.timestamp)
