@@ -1,5 +1,12 @@
 Adafruit-DHT==1.0.0
+click==6.7
+Flask-SQLAlchemy==2.3.2
+Flask==0.12.2
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
 pywapi==0.3.8
 RPi.GPIO==0.6.1
 SQLAlchemy==1.0.11
-
+SQLAlchemy==1.2.0
+Werkzeug==0.14.1
