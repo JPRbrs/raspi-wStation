@@ -1,6 +1,7 @@
-*.pyc
+*.cron
 *.db
+*.pyc
 *~
 .#*
-*.cron
+.cache/
 venv/
