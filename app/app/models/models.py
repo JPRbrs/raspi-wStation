@@ -1,4 +1,4 @@
-from server import db
+from app import db
 
 
 class Instant(db.Model):
