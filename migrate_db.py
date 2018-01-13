@@ -24,7 +24,7 @@ def process_csv_row(row):
 
 
 def process_csv_file():
-    with open('data.csv', 'r') as data:
+    with open('/home/javier/data.csv', 'r') as data:
         reader = csv.reader(data)
         for row in reader:
             process_csv_row(row)
