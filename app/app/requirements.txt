@@ -7,7 +7,6 @@ funcsigs==1.0.2
 itsdangerous==0.24
 Jinja2==2.10
 MarkupSafe==1.0
-MySQL-python==1.2.5
 pluggy==0.6.0
 py==1.5.2
 pytest==3.3.2

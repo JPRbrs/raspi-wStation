@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime
-from server import db
-from models.models import Instant
+from app.app import db
+from app.app.models.models import Instant
 
 
 def build_timestamp(row):
@@ -28,3 +28,7 @@ def process_csv_file():
         reader = csv.reader(data)
         for row in reader:
             process_csv_row(row)
+
+
+if __name__ == '__main__':
+    process_csv_file()
