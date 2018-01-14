@@ -1,12 +1,11 @@
 from models.models import Instant
-# from app.dth import get_hum_and_temp
-from app import db
+from dth import get_hum_and_temp
+from app.app import db
 from datetime import datetime
 
 
 def save_instant():
-    # t, h = get_hum_and_temp()
-    t, h = 1, 2
+    t, h = get_hum_and_temp()
     timestamp = datetime.now().isoformat()
     i = Instant(temperature=t, humidity=h, timestamp=timestamp)
     db.session.add(i)
