@@ -1,11 +1,13 @@
 from flask import render_template
 
 from app import app
+from dbi import get_latest
+from models import Instant
 
 
 @app.route('/')
 def index():
     """Serve the index HTML"""
-    from dbi import get_all_instants
-    instants = get_all_instants()
-    return render_template('index.html', instants=instants)
+    # instant = get_latest()
+    instant = Instant(temperature=1, humidity=2, timestamp='2017-1-1')
+    return render_template('index.html', instant=instant)

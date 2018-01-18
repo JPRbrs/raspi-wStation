@@ -2,17 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Flask SocketIO Test</title>
+  <title>Home weather station</title>
 </head>
 <body>
-  <h1>Hello Ladies!</h1>
-  <ul>
-    {% for i in instants %}
-    <li>Timestamp: {{ i.timestamp }} </li>
-    <li>Temperature: {{ i.temperature }}</li>
-    <li>Humidity: {{ i.humidity }}</i>
-    <br><br>
-    {% endfor %}
+  <h1>Header</h1>
+  <div>
+    Latest measured temp: {{instant.temp}}<br>
+    Latest measured hum: {{instant.hum}}<br>
+    Time: {{instant.timestamp}}<br>
   </div>
 </body>
 </html>

@@ -1,7 +1,10 @@
 from models import Instant
 # from dth import get_hum_and_temp
 from app import db
-from datetime import datetime
+from datetime import (
+    datetime,
+    timedelta,
+)
 
 
 def save_instant():
@@ -17,6 +20,12 @@ def test():
     i = Instant(temperature=1, humidity=2, timestamp='2017-1-1')
     db.session.add(i)
     db.session.commit()
+
+
+def get_latest():
+    timestamp = datetime.now().isoformat()
+    five_min_ago = (datetime.now() - timedelta(minutes=5)).isoformat()
+    print(timestamp, five_min_ago)
 
 
 def get_all_instants():

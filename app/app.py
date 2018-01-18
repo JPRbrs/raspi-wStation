@@ -9,5 +9,3 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:////{}'.format(DB_PATH)
 db = SQLAlchemy(app)
 
 import views
-
-db.create_all()
