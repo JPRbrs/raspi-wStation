@@ -1,3 +1,3 @@
-from app.app.dbi import save_instant
+from app.dbi import save_instant
 
 save_instant()
