@@ -13,6 +13,7 @@ csv format so we can importe it on the newly create mysql db
  
 ## Next steps
  - We need to create tables before import with db.create_all()
- - Data from Instant is stored in instant table, I need to define the table name as instants
- - I need to delete the User model
  - I need to find out why running migrate_db does not populate the db
+ - Create command to create db
+ - Test migrations work
+ - Deploy to wayreth
