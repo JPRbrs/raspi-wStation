@@ -30,7 +30,7 @@ def save_instant_into_db():
 
 @manager.command
 def cron_lcd():
-    temp, hum = get_hum_and_temp()
+    hum, temp = get_hum_and_temp()
     time = datetime.now().strftime('%H:%M')
     weather_dict = weather.get_weather()
     line1 = "{0:0.1f} C and {1:0.1f}%".format(temp, hum)
