@@ -4,15 +4,13 @@ from time import sleep
 from flask import Flask
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
-import weather
 
 from app import app, db
 from app.dht import get_hum_and_temp
 from app.dbi import save_instant
 from lcd import LCD
+import weather
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 migrate = Migrate(app, db)
 
@@ -44,15 +42,9 @@ def cron_lcd():
         sleep(0.5)
         lcd.send_text(line1, 1)
         lcd.send_text(line2, 2)
-    except Exception, e:
-        print e
+    except Exception:
         lcd._clean_up()
-        quit()
-    except KeyboardInterrupt:
-        print 'User interrupted'
-        lcd._clean_up()
-        quit()
+        raise
 
-
-#if __name__ == "__main__":
-#    manager.run()
+if __name__ == "__main__":
+    manager.run()
