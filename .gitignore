@@ -1,5 +1,9 @@
-*.pyc
+data.csv
+home.db
+*.cron
 *.db
+*.pyc
 *~
 .#*
-*.cron
+.cache/
+venv/
