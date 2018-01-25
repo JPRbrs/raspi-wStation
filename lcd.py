@@ -29,7 +29,10 @@
 # Code was modified to use it as a library
 
 import time
-import RPi.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except RuntimeError:
+    print('Not running on the pi, some features won\'t be available')
 
 # Define GPIO to LCD mapping
 LCD_RS = 7

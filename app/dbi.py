@@ -1,10 +1,15 @@
 from models import Instant
-from dht import get_hum_and_temp
+
 from app import db
 from datetime import (
     datetime,
     timedelta,
 )
+
+try:
+    from dht import get_hum_and_temp
+except ImportError:
+    print('Not running on the pi, some features won\'t be available')
 
 
 def save_instant():

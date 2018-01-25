@@ -2,13 +2,16 @@
 Requests temperature and humidity from DHT sensor
 
 """
-from Adafruit_DHT import (
-    read_retry,
-    DHT22
-)
+try:
+    from Adafruit_DHT import (
+        read_retry,
+        DHT22
+    )
+    sensor = DHT22
+    pin = 11
 
-sensor = DHT22
-pin = 11
+except ImportError:
+    print('Not running on the pi, some features won\'t be available')
 
 
 def get_hum_and_temp():
