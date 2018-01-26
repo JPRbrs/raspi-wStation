@@ -16,7 +16,7 @@ from lcd import LCD
 
 
 migrate = Migrate(app, db)
-
+app.debug = True
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 

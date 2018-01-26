@@ -26,5 +26,11 @@ def get_latest():
     print(timestamp, five_min_ago)
 
 
+def get_last_week():
+    last_week = db.session.query(Instant).filter(
+        Instant.timestamp > '2018-01-22').all()
+    return last_week
+
+
 def get_all_instants():
     return Instant.query.all()
