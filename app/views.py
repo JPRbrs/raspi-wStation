@@ -1,4 +1,4 @@
-from flask import render_template, make_response
+from flask import render_template, make_response, send_file
 
 from app import app
 from models import Instant
@@ -53,4 +53,8 @@ def simple():
     response = make_response(png_output.getvalue())
     response.headers['Content-Type'] = 'image/png'
 
-    return response
+    fig.savefig(png_output)
+    png_output.seek(0)
+    return send_file(png_output, mimetype='image/png')
+
+    # return response
