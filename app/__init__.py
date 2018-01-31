@@ -10,4 +10,5 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-import views, models
+import views  # NOQA
+import models # NOQA
