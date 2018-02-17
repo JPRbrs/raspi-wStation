@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Home weather station</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
   <h1>Header</h1>
@@ -10,6 +11,9 @@
     Latest measured temp: {{instant.temp}}<br>
     Latest measured hum: {{instant.hum}}<br>
     Time: {{instant.timestamp}}<br>
+    <button id='button'>pushme</button>
   </div>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
 </body>
 </html>

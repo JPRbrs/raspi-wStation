@@ -1,4 +1,4 @@
-from flask import render_template, make_response, send_file
+from flask import render_template, make_response, send_file, jsonify
 
 from app import app
 from models import Instant
@@ -58,3 +58,10 @@ def simple():
     return send_file(png_output, mimetype='image/png')
 
     # return response
+
+
+@app.route('/ajax_call', methods=['POST'])
+def ajax():
+    return jsonify({
+        'result': 'returned data',
+    })
