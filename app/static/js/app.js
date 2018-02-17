@@ -6,10 +6,11 @@ $(document).ready(function() {
         $.post('/ajax_call', {
             text: 'texto',
         }).done(function(result) {
-            console.log(result.result);
+            console.log(result);
         }).fail(function(result) {
             console.log(result);
             console.log('fail');
         });
     });
 });
+
