@@ -1,7 +1,11 @@
-from models import Instant
+from models import (
+    Day,
+    Instant,
+)
 
 from app import db
 from datetime import (
+    date,
     datetime,
     timedelta,
 )
@@ -32,13 +36,18 @@ def get_last_week():
     return last_week
 
 
-def get_instants_from_month(year, month):
-    month_filter = '{}-{}-%'.format(
-        str(year).zfill(2),
-        str(month).zfill(2))
-    instants = Instant.query.filter(
-        Instant.timestamp.like(month_filter)).all()
-    return instants
+def get_day(year, month, day):
+    date_obj = date(year, month, day)
+
+    date_filter = '{}-{}-{}%'.format(
+        year,
+        str(month).zfill(2),
+        str(day).zfill(2)
+    )
+    instants = Instant.query.filter(Instant.timestamp.like(date_filter)).all()
+
+    day = Day(date_obj, instants)
+    return day
 
 
 def get_all_instants():
