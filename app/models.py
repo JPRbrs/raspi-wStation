@@ -2,6 +2,7 @@ from app import db
 
 
 class Instant(db.Model):
+
     __tablename__ = 'instants'
     id = db.Column(db.Integer, primary_key=True)
     temperature = db.Column(db.Float, nullable=False)
@@ -21,3 +22,20 @@ class Instant(db.Model):
         return {
             key: getattr(self, key) for key in self.json_attributes
         }
+
+
+class Day(object):
+
+    def __init__(self, date, instants):
+        self.date = date
+        self.instants = instants
+
+    def __repr__(self):
+        return '<Day: {}>'.format(self.date)
+
+    def day_average(self, attr):
+        total = 0
+        for instant in self.instants:
+            total += getattr(instant, attr)
+        average = total / len(self.instants)
+        return round(average, 1)
