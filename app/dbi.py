@@ -32,7 +32,7 @@ def get_latest():
 
 def get_last_week():
     last_week = db.session.query(Instant).filter(
-        Instant.timestamp > '2018-01-22').all()
+        Instant.timestamp > '2018-01-01').all()
     return last_week
 
 

@@ -6,37 +6,13 @@
   <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
   <!-- <script src="{{ url_for('static', filename='js/app.js') }}"></script> -->
   <script src="{{ url_for('static', filename='js/jquery.flot.js') }}"></script>
-  <script>
-    $(document).ready(function() {
-    $.plot($('#placeholder'), [[[0, 0], [1, 1]]], {yaxis: {max: 1}});
-    var button = $('#button');
-    var values = [];
-    var instants ='{{ day.instants }}';
-    console.log(typeof(instants));
-    button.click(function() {
-        console.log('hide!');
-        $('#button').hide();
-        $.post('/ajax_call', {
-            text: 'texto',
-        }).done(function(result) {
-            console.log(result);
-        }).fail(function(result) {
-            console.log(result);
-            console.log('fail');
-        });
-    });
-});
-  </script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>  
 </head>
 <body>
   <h1>Arbitrary day</h1>
   <div id="placeholder" style="width:600px;height:300px"></div>
   <div>
-    <ul>
-    {% for i in day.instants %}
-    <li>{{ i.timestamp[11:] }} - {{ i.temperature }} - {{ i.humidity }}</li>
-    {% endfor %}
-    </ul>
+    <button id='button'>show graph</button>
   </div>
 </body>
 </html>

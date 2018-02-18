@@ -65,14 +65,11 @@ def simple():
 
 @app.route('/ajax_call', methods=['POST'])
 def ajax():
-    i = Instant(temperature=1,
-                humidity=2,
-                timestamp='aasdfasd')
-    return jsonify(i.toJSON())
+    return jsonify(get_day(2018, 1, 1).toJSON())
 
 
 @app.route('/test_one_day')
 def test_one_day():
     day = get_day(2017, 9, 20)
 
-    return render_template('test_one_day.html', day=(day.toJSON()))
+    return render_template('test_one_day.html', day=day)

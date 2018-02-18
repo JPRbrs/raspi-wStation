@@ -1,7 +1,5 @@
 $(document).ready(function() {
-    $.plot($('#placeholder'), [[[0, 0], [1, 1]]], {yaxis: {max: 1}});
     var button = $('#button');
-    console.log('{{ day.instants }}');
     button.click(function() {
         console.log('hide!');
         $('#button').hide();
@@ -9,10 +7,19 @@ $(document).ready(function() {
             text: 'texto',
         }).done(function(result) {
             console.log(result);
+            var array = [];
+            var x = 0;
+            result.instants.forEach((instant) => {
+                var timestamp = instant.timestamp.slice(-8);
+                console.log(timestamp, instant.temperature);
+                array.push([x, instant.temperature]);
+                x += 1;
+            });
+            array = [array];
+            $.plot($('#placeholder'), array);
         }).fail(function(result) {
             console.log(result);
             console.log('fail');
         });
     });
 });
-
