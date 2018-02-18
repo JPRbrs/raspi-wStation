@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home weather station</title>
+</head>
+<body>
+  <h1>Arbitrary day</h1>
+  <div>
+    <ul>
+    {% for i in day.instants %}
+    <li>{{ i.timestamp[11:] }} - {{ i.temperature }} - {{ i.humidity }}</li>
+    {% endfor %}
+    </ul>
+  </div>
+</body>
+</html>

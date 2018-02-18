@@ -40,13 +40,8 @@ class Day(object):
         average = total / len(self.instants)
         return round(average, 1)
 
-
-class Month(object):
-
-    def __init__(self, year, month, days):
-        self.days = days
-        self.year = year
-        self.month = month
-
-    def __repr__(self):
-        return '<Month: {}-{}>'.format(self.year, self.month)
+    def toJSON(self):
+        return {
+            'date': self.date,
+            'instants': [i.toJSON() for i in self.instants]
+        }

@@ -2,7 +2,10 @@ from flask import render_template, make_response, send_file, jsonify
 
 from app import app
 from models import Instant
-from app.dbi import get_last_week
+from app.dbi import (
+    get_day,
+    get_last_week,
+)
 
 
 @app.route('/')
@@ -66,3 +69,10 @@ def ajax():
                 humidity=2,
                 timestamp='aasdfasd')
     return jsonify(i.toJSON())
+
+
+@app.route('/test_one_day')
+def test_one_day():
+    day = get_day(2017, 9, 20)
+
+    return render_template('test_one_day.html', day=(day.toJSON()))
