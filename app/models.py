@@ -39,3 +39,14 @@ class Day(object):
             total += getattr(instant, attr)
         average = total / len(self.instants)
         return round(average, 1)
+
+
+class Month(object):
+
+    def __init__(self, year, month, days):
+        self.days = days
+        self.year = year
+        self.month = month
+
+    def __repr__(self):
+        return '<Month: {}-{}>'.format(self.year, self.month)

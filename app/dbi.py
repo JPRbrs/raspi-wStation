@@ -32,5 +32,14 @@ def get_last_week():
     return last_week
 
 
+def get_instants_from_month(year, month):
+    month_filter = '{}-{}-%'.format(
+        str(year).zfill(2),
+        str(month).zfill(2))
+    instants = Instant.query.filter(
+        Instant.timestamp.like(month_filter)).all()
+    return instants
+
+
 def get_all_instants():
     return Instant.query.all()
