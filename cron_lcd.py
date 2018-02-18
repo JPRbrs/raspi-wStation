@@ -31,5 +31,6 @@ def main():
         lcd._clean_up()
         quit()
 
+
 if __name__ == '__main__':
     main()

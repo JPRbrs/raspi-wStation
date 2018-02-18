@@ -6,8 +6,9 @@
 
 import pywapi
 
+
 def get_weather():
-# Returns a dict with two keys: out_feel and out_conditions
+    # Returns a dict with two keys: out_feel and out_conditions
     retval = {}
 
     weather = pywapi.get_weather_from_weather_com('BS16:4:UK')
@@ -16,10 +17,14 @@ def get_weather():
 
     return retval
 
+
 def main():
     weather = get_weather()
 
-    print "%s and feels %d outside" %(weather['out_conditions'], int(weather['out_feel']))
+    print "%s and feels %d outside" % (
+        weather['out_conditions'],
+        int(weather['out_feel']))
+
 
 if __name__ == '__main__':
     main()
