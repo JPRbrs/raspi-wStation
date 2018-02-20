@@ -1,4 +1,4 @@
-from flask import render_template, make_response, send_file, jsonify
+from flask import render_template, make_response, send_file, jsonify, request
 
 from app import app
 from models import Instant
@@ -65,7 +65,9 @@ def simple():
 
 @app.route('/ajax_call', methods=['POST'])
 def ajax():
-    return jsonify(get_day(2018, 1, 1).toJSON())
+    date = request.json['date']
+
+    return jsonify(get_day(date).toJSON())
 
 
 @app.route('/test_one_day')

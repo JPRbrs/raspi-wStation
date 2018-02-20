@@ -5,7 +5,6 @@ from models import (
 
 from app import db
 from datetime import (
-    date,
     datetime,
     timedelta,
 )
@@ -36,17 +35,12 @@ def get_last_week():
     return last_week
 
 
-def get_day(year, month, day):
-    date_obj = date(year, month, day)
+def get_day(date):
+    instants = Instant.query.filter(
+        Instant.timestamp.like('{}%'.format(date))).all()
 
-    date_filter = '{}-{}-{}%'.format(
-        year,
-        str(month).zfill(2),
-        str(day).zfill(2)
-    )
-    instants = Instant.query.filter(Instant.timestamp.like(date_filter)).all()
-
-    day = Day(date_obj, instants)
+    print date
+    day = Day(date, instants)
     return day
 
 
