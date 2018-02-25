@@ -6,15 +6,38 @@ from app.dbi import (
     get_day,
     get_last_week,
 )
+from weather import get_weather
+
+
+@app.route('/testing')
+def index_testing():
+    """
+    Serve index when running outside of the pi
+    """
+    instant = Instant(temperature=1, humidity=2, timestamp='1979-01-01')
+    return render_template('index_testing.html', instant=instant)
+
+
+@app.route('/outdoors')
+def outdoors():
+    """
+    Shows outdoors conditions
+    """
+    return render_template('outdoors.html', today=get_weather())
+
+
+@app.route('/home_weather')
+def home_weather():
+    """Page showing indoor temp and hum"""
+
+    # instant = get_latest()
+    instant = Instant(temperature=1, humidity=2, timestamp='2017-1-1')
+    return render_template('indoor.html', instant=instant)
 
 
 @app.route('/')
 def index():
-    """Serve the index HTML"""
-
-    # instant = get_latest()
-    instant = Instant(temperature=1, humidity=2, timestamp='2017-1-1')
-    return render_template('index.html', instant=instant)
+    return render_template('index.html')
 
 
 @app.route('/last_week')
@@ -60,8 +83,6 @@ def simple():
     png_output.seek(0)
     return send_file(png_output, mimetype='image/png')
 
-    # return response
-
 
 @app.route('/ajax_call', methods=['POST'])
 def ajax():
@@ -72,6 +93,18 @@ def ajax():
 
 @app.route('/test_one_day')
 def test_one_day():
-    day = get_day(2017, 9, 20)
+    day = get_day((2017, 9, 20))
 
     return render_template('test_one_day.html', day=day)
+
+
+@app.route('/d3')
+def d3():
+    day = get_day('2017-09-20')
+
+    my_data = [{'time': i.timestamp,
+                'name': 'temperature',
+                'value': i.temperature}
+               for i in day.instants]
+
+    return render_template('d3.html', my_data=my_data)

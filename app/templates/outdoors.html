@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home weather station</title>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.flot.js') }}"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+  <h1>Outdoor Conditions</h1>
+  <div>
+    <p> It is {{ today.out_conditions }} and feels like: {{ today.feels_like }} C</p>
+    <p> Temperature: {{ today.out_temperature }} C</p>
+    <p> Humidity: {{ today.out_humidity }} %</p>
+    <p> UV index: {{ today.uv_index }}</p>
+    <p> Wind direction: {{ today.wind_direction }}</p>
+    <p> Wind speed: {{ today.wind_speed }} km/h</p>
+  </div>
+</body>
+</html>
