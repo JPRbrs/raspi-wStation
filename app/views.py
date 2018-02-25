@@ -6,7 +6,10 @@ from app.dbi import (
     get_day,
     get_last_week,
 )
-from weather import get_weather
+from weather import (
+    get_weather,
+    get_forecast
+)
 
 
 @app.route('/testing')
@@ -23,7 +26,10 @@ def outdoors():
     """
     Shows outdoors conditions
     """
-    return render_template('outdoors.html', today=get_weather())
+    return render_template('outdoors.html',
+                           today=get_weather(),
+                           forecast=get_forecast(1)
+    )
 
 
 @app.route('/home_weather')
