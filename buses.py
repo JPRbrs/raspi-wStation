@@ -27,4 +27,4 @@ def get_next_bus(stop_id, max_items=3):
 
 
 if __name__ == '__main__':
-    get_next_bus(stop_id=portcullis, max_items=1)
+    get_next_bus(stop_id=portcullis['primaryCode'], max_items=1)
