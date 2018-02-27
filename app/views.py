@@ -10,6 +10,21 @@ from weather import (
     get_weather,
     get_forecast
 )
+from secrets import portcullis
+from buses import get_next_bus
+
+
+@app.route('/buses')
+def buses():
+    """
+    Show next buses
+    """
+    next_bus = get_next_bus(stop_id=portcullis['primaryCode'], max_items=1)
+    bus = {
+        'number': next_bus['groupID'],
+        'time': next_bus['timeLabel']
+    }
+    return render_template('buses.html', bus=bus)
 
 
 @app.route('/testing')
