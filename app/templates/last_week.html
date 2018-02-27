@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home weather station</title>
+</head>
+<body>
+  <h1>Instant last week</h1>
+  <div>
+    <img src="{{ url_for('simple') }}" alt="Image Placeholder" height="400">
+    <ul>
+    {% for i in instants_last_week %}
+    <li>{{ i.timestamp }} - {{ i.temperature }} - {{ i.humidity }}</li>
+    </ul>
+    {% endfor %}
+  </div>
+</body>
+</html>

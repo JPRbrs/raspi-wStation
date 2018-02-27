@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home weather station</title>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.flot.js') }}"></script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+</head>
+<body>
+  <h1>Indoor Conditions</h1>
+  <div>
+    Latest measured temp: {{instant.temp}}<br>
+    Latest measured hum: {{instant.hum}}<br>
+    Time: {{instant.timestamp}}<br>
+    <p>Date: <input type="text" id="datepicker"></p>
+    <div id="placeholder" style="width:600px;height:300px"></div>
+  </div>
+</body>
+</html>

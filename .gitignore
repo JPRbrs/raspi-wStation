@@ -1,8 +1,11 @@
-*.pyc
+*.cron
+*.cron
 *.db
+*.pyc
 *~
 .#*
-*.cron
-secrets.py
 .cache/
+data.csv
+home.db
+secrets.py
 venv/
