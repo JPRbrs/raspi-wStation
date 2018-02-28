@@ -8,27 +8,7 @@
 <!-- Load d3plus.js -->
 <script src="http://www.d3plus.org/js/d3plus.js"></script>
 
-<!-- <ul> -->
-<!--   {% for i in my_data %} -->
-<!--   <li> {{ i }} </li> -->
-<!--   {% endfor %} -->
-<!-- </ul> -->
-<!-- <div> {{my_data}} </div> -->
 <div id="viz"></div>
-<script type="text/javascript">
-  // load your data
-  var sample_data = [{'name': 'temperature', 'value': 20.2, 'time': '2017-09-20T00:00:00'}, {'name': 'temperature', 'value': 20.1, 'time': '2017-09-20T00:05:00'}, {'name': 'temperature', 'value': 20.2, 'time': '2017-09-20T00:10:00'}, {'name': 'temperature', 'value': 20.1, 'time': '2017-09-20T00:15:00'}, {'name': 'temperature', 'value': 20.1, 'time': '2017-09-20T00:20:00'}, {'name': 'temperature', 'value': 20.1, 'time': '2017-09-20T00:25:00'}, {'name': 'temperature', 'value': 20.1, 'time': '2017-09-20T00:30:00'}, {'name': 'temperature', 'value': 20.1, 'time': '2017-09-20T00:35:00'}, {'name': 'temperature', 'value': 20.1, 'time': '2017-09-20T00:40:00'}, {'name': 'temperature', 'value': 20.1, 'time': '2017-09-20T00:45:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T00:50:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T00:55:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:00:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:05:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:10:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:15:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:20:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:25:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:30:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:35:00'}, {'name': 'temperature', 'value': 20.0, 'time': '2017-09-20T01:40:00'}, {'name': 'temperature', 'value': 19.9, 'time': '2017-09-20T01:45:00'}, {'name': 'temperature', 'value': 19.9, 'time': '2017-09-20T01:50:00'}]
-  
-  // instantiate d3plus
-  var visualization = d3plus.viz()
-    .container("#viz")  // container DIV to hold the visualization
-    .data(sample_data)  // data to use with the visualization
-    .type("line")       // visualization type
-    .id("name")         // key for which our data is unique on
-    .text("name")       // key to use for display text
-    .y("value")         // key to use for y-axis
-    .x("time")          // key to use for x-axis
-    .draw()             // finally, draw the visualization!
-</script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/d3plot.js') }}"></script>
 
 </html>

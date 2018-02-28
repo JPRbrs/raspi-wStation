@@ -6,7 +6,8 @@
   <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/jquery.flot.js') }}"></script>
+  <script src="http://www.d3plus.org/js/d3.js" charset="utf-8"></script>
+  <script src="http://www.d3plus.org/js/d3plus.js"></script>
   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
@@ -16,7 +17,8 @@
     Latest measured hum: {{instant.hum}}<br>
     Time: {{instant.timestamp}}<br>
     <p>Date: <input type="text" id="datepicker"></p>
-    <div id="placeholder" style="width:600px;height:300px"></div>
+
+    <div id="viz"></div>
   </div>
 </body>
 </html>

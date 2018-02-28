@@ -9,19 +9,28 @@ $(document).ready(function() {
                     data: JSON.stringify({date: date}),
                     contentType: 'application/json;charset=UTF-8',
                     success: function(result) {
-                        var array = [];
-                        var x = 0;
+                        var data = [];
+                        console.log(result.instants);
+                        console.log(typeof (result));
                         result.instants.forEach((instant) => {
-                            var timestamp = instant.timestamp.slice(-8);
-                            console.log(instant.timestamp, instant.temperature);
-                            array.push([x, instant.temperature]);
-                            x += 1;
+                            data.push({name: 'temperatura',
+                                       time: instant.timestamp,
+                                       value: instant.temperature
+                                      });
                         });
-                        array = [array];
-                        console.log(array);
-                        $.plot($('#placeholder'), array);
+                        console.log(data);
+                        d3plus.viz()
+                            .container('#viz') // container DIV to hold the visualization
+                            .data(data) // data to use with the visualization
+                            .type('line') // visualization type
+                            .id('name') // key for which our data is unique on
+                            .text('name') // key to use for display text
+                            .y('value') // key to use for y-axis
+                            .x('time') // key to use for x-axis
+                            .draw(); // finally, draw the visualization!
                     },
-                    failure: function(result){
+                    failure: function(result) {
+                        console.log('Error on ajax request');
                         console.log(result);
                     }
                 });
@@ -29,4 +38,5 @@ $(document).ready(function() {
         });
     });
 });
+
 
