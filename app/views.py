@@ -110,22 +110,3 @@ def ajax():
     date = request.json['date']
 
     return jsonify(get_day(date).toJSON())
-
-
-@app.route('/test_one_day')
-def test_one_day():
-    day = get_day((2017, 9, 20))
-
-    return render_template('test_one_day.html', day=day)
-
-
-@app.route('/d3')
-def d3():
-    day = get_day('2017-09-20')
-
-    my_data = [{'time': i.timestamp,
-                'name': 'temperature',
-                'value': i.temperature}
-               for i in day.instants]
-
-    return render_template('d3.html', my_data=my_data)
