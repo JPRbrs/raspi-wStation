@@ -38,7 +38,7 @@ def cron_lcd():
     weather_dict = weather.get_weather()
     line1 = "{0:0.1f} C and {1:0.1f}%".format(temp, hum)
     line2 = time + " Feels %d" % (
-        int(weather_dict['out_feel'])
+        int(weather_dict['feels_like'])
     )
     try:
         lcd = LCD()

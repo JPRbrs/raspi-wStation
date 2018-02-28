@@ -1,9 +1,11 @@
-data.csv
-home.db
+*.cron
 *.cron
 *.db
 *.pyc
 *~
 .#*
 .cache/
+data.csv
+home.db
+secrets.py
 venv/
