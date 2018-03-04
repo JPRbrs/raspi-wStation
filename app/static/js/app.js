@@ -1,5 +1,25 @@
+var ractive = new Ractive({
+    el: '#output',
+    template: '#template',
+    // `
+    //     <h2>{{ foo }}</h2>
+    // `,
+    data: {
+        foo: 'test'
+        }
+});
+console.log(ractive.get('foo')); // => {bar: 1, baz: 2}
+console.log(ractive);
+
 $(document).ready(function() {
+
     $(function() {
+        // var ractive = Ractive({
+        //     el: '#target',
+        //     template: '#template',
+        //     data: { value: 12 }
+        // });
+        // console.log(ractive);
         $('#datepicker').datepicker({
             dateFormat: 'yy-mm-dd',
             onSelect: function (date) {

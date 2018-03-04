@@ -3,40 +3,48 @@
   <head>
     <meta charset="UTF-8">
     <title>Home weather station</title>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="{{ url_for('static', filename='js/jquery-1.12.4.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ractive.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/jquery-ui.css') }}">
   </head>
   <body>
     <h1>Raspberry Pi Weather Station</h1>
-    <div>
-      <a href='home_weather'>
-        <div class="card">
-          <img src="{{ url_for('static', filename='images/house.png') }}" alt="Avatar" style="width:15%">
-          <div class="container">
-            <h4><b>Indoor weather</b></h4>
-          </div>
-        </div>
-      </a>
-      <a href='outdoors'> 
-        <div class="card">
-          <img src="{{ url_for('static', filename='images/outdoor.png') }}" alt="Avatar" style="width:15%">
-          <div class="container">
-            <h4><b>Outdoor weather</b></h4>
-          </div>
-        </div>
-      </a>
-      <a href='buses'> 
-        <div class="card">
-          <img src="{{ url_for('static', filename='images/bus.png') }}" alt="Avatar" style="width:15%">
-          <div class="container">
-            <h4><b>Next Bus</b></h4>
-          </div>
-        </div>
-      </a>
-    </div>
-</div>
+    <div id="output"></div>
+
+    <script id="template" type="text/ractive">
+      <h2>{{ foo }}</h2>
+    </script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
+<!--     <div> -->
+<!--       <a href='home_weather'> -->
+<!--         <div class="card"> -->
+<!--           <img src="{{ url_for('static', filename='images/house.png') }}" alt="Avatar" style="width:15%"> -->
+<!--           <div class="container"> -->
+<!--             <h4><b>Indoor weather</b></h4> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </a> -->
+<!--       <a href='outdoors'> -->
+<!--         <div class="card"> -->
+<!--           <img src="{{ url_for('static', filename='images/outdoor.png') }}" alt="Avatar" style="width:15%"> -->
+<!--           <div class="container"> -->
+<!--             <h4><b>Outdoor weather</b></h4> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </a> -->
+<!--       <a href='buses'> -->
+<!--         <div class="card"> -->
+<!--           <img src="{{ url_for('static', filename='images/bus.png') }}" alt="Avatar" style="width:15%"> -->
+<!--           <div class="container"> -->
+<!--             <h4><b>Next Bus</b></h4> -->
+<!--           </div> -->
+<!--         </div> -->
+<!--       </a> -->
+<!--     </div> -->
+<!-- </div> -->
+
 </body>
 </html>
