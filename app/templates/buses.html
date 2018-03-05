@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-</head>
-<body>
-  <h1>Next bus</h1>
+{% extends "base.html" %}
+{% block body %}
+<h1>Next bus</h1>
   <div>
     Next Bus: {{ bus.number }}<br>
     Minutes: {{ bus.time }}<br>
   </div>
-</body>
-</html>
+{% endblock %}
