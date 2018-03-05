@@ -12,13 +12,13 @@
   <body>
     <h1>Raspberry Pi Weather Station</h1>
     <div id="output"></div>
+        <p>Date:<input type="text" id="datepicker"></p>
     {% raw %}
     <script id="template" type="text/ractive">
       <h2>{{ foo }}</h2>
     </script>
     {% endraw %}
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
-
     <div>
       <a href='home_weather'>
         <div class="card">
