@@ -2,6 +2,7 @@
 {% block body %}
 <script src="{{ url_for('static', filename='js/d3.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/d3plus.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
 <h1>Indoor Conditions</h1>
 <div id="output"></div>
 <p>Date:<input type="text" id="datepicker"></p>
@@ -12,11 +13,14 @@
 
 <div id="viz"></div>
 
+
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 <div>
   Latest measured temp: {{instant.temp}}<br>
   Latest measured hum: {{instant.hum}}<br>
   Time: {{instant.timestamp}}<br>
 </div>
+<canvas id="temp_chart" width="400" height="400"></canvas>
+<canvas id="hum_chart" width="400" height="400"></canvas>
 </div>
 {% endblock %}

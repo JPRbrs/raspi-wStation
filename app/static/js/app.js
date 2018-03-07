@@ -6,6 +6,37 @@ var app = new Ractive({
         }
 });
 
+function plot_data(canvas_id, xdata, ydata, label) {
+    var ctx = document.getElementById(canvas_id);
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: xdata,
+            datasets: [{
+                label: label,
+                backgroundColor: 'rgb(255, 99, 132)',
+                borderColor: 'rgb(255, 99, 132)',
+                data: ydata,
+            }]
+        },
+        // options: options; //unset
+    });
+}
+
+function format_data(result) {
+    var time = [];
+    var temp = [];
+    var hum = [];
+    result.instants.forEach((instant) => {
+        time.push(instant.timestamp.slice(11, 18));
+        temp.push(instant.temperature);
+        hum.push(instant.humidity);
+    });
+
+    var data = {time: time, temp: temp, hum: hum};
+    return data;
+}
+
 $(document).ready(function() {
     $(function() {
         $('#datepicker').datepicker({
@@ -17,34 +48,13 @@ $(document).ready(function() {
                     data: JSON.stringify({date: date}),
                     contentType: 'application/json;charset=UTF-8',
                     success: function(result) {
-                        var data = [];
-                        console.log(result.instants);
-                        console.log(typeof (result));
-                        result.instants.forEach((instant) => {
-                            data.push({name: 'temperatura',
-                                       time: instant.timestamp,
-                                       value: instant.temperature
-                                      });
-                        });
-                        console.log(data);
-                        d3plus.viz()
-                            .container('#viz') // container DIV to hold the visualization
-                            .data(data) // data to use with the visualization
-                            .type('line') // visualization type
-                            .id('name') // key for which our data is unique on
-                            .text('name') // key to use for display text
-                            .y('value') // key to use for y-axis
-                            .x('time') // key to use for x-axis
-                            .draw(); // finally, draw the visualization!
-                    },
-                    failure: function(result) {
-                        console.log('Error on ajax request');
-                        console.log(result);
+                        var data = format_data(result);
+                        plot_data('temp_chart', data['time'], data['temp'],
+                                  'temperature');
+                        plot_data('hum_chart', data['time'], data['hum'], 'humidity');
                     }
                 });
             }
         });
     });
 });
-
-
