@@ -13,13 +13,25 @@ function plot_data(canvas_id, xdata, ydata, label) {
         data: {
             labels: xdata,
             datasets: [{
+                lineTension: 0.23,
                 label: label,
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: ydata,
             }]
         },
-        // options: options; //unset
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero:false,
+                    }
+                }],
+                xAxes: [{
+                    ticks: {}
+                }],
+            }
+        }
     });
 }
 
@@ -28,7 +40,7 @@ function format_data(result) {
     var temp = [];
     var hum = [];
     result.instants.forEach((instant) => {
-        time.push(instant.timestamp.slice(11, 18));
+        time.push(instant.timestamp.slice(11, 16));
         temp.push(instant.temperature);
         hum.push(instant.humidity);
     });
