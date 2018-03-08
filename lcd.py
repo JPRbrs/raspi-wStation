@@ -175,7 +175,7 @@ class LCD:
         GPIO.output(LED_ON, state)
 
     def move(self, seconds, text):
-        for x in range(seconds*2):
+        for x in range(seconds * 2):
             self.send_text(text, 1)
             time.sleep(0.5)
             text = self._displace(text)

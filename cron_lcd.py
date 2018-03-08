@@ -3,7 +3,6 @@ from datetime import datetime
 import DHT
 import weather
 from lcd import LCD
-from time import sleep
 from buses import get_next_bus
 from secrets import portcullis
 
