@@ -9,7 +9,10 @@ try:
 except ImportError:
     print('Not running on the pi, some features won\'t be available')
 
-from app.dbi import save_instant
+from app.dbi import (
+    save_instant,
+    save_outdoors_instant,
+)
 from lcd import LCD
 import weather
 from app import app
@@ -24,6 +27,11 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def save_instant_into_db():
     save_instant()
+
+
+@manager.command
+def save_outdoors_instant_into_db():
+    save_outdoors_instant()
 
 
 @manager.command

@@ -1,6 +1,7 @@
 from models import (
     Day,
     Instant,
+    OutdoorInstant,
 )
 
 from app import db
@@ -8,6 +9,8 @@ from datetime import (
     datetime,
     timedelta,
 )
+
+from weather import get_weather
 
 try:
     from dht import get_hum_and_temp
@@ -20,6 +23,20 @@ def save_instant():
     timestamp = datetime.now().isoformat()
     i = Instant(temperature=t, humidity=h, timestamp=timestamp)
     db.session.add(i)
+    db.session.commit()
+
+
+def save_outdoors_instant():
+    current_out_conditions = get_weather()
+    out_instant = OutdoorInstant(
+        temperature=current_out_conditions['out_temperature'],
+        humidity=current_out_conditions['out_humidity'],
+        feels_like=current_out_conditions['feels_like'],
+        wind_direction=current_out_conditions['wind_speed'],
+        timestamp=datetime.now().isoformat()
+    )
+
+    db.session.add(out_instant)
     db.session.commit()
 
 
