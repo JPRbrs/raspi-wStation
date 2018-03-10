@@ -26,7 +26,7 @@ def save_instant():
     db.session.commit()
 
 
-def save_outdoors_instant():
+def save_outdoor_instant():
     current_out_conditions = get_weather()
     out_instant = OutdoorInstant(
         temperature=current_out_conditions['out_temperature'],

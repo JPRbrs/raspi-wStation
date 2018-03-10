@@ -1,4 +1,4 @@
-"""Add outdoors instant
+"""Add outdoor instant
 
 Revision ID: e869c1c289ff
 Revises: 7f3247bd8b75

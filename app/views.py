@@ -30,12 +30,12 @@ def buses():
     return render_template('buses.html', bus=bus)
 
 
-@app.route('/outdoors')
-def outdoors():
+@app.route('/outdoor')
+def outdoor():
     """
-    Shows outdoors conditions
+    Shows outdoor conditions
     """
-    return render_template('outdoors.html',
+    return render_template('outdoor.html',
                            today=get_weather(),
                            forecast=get_forecast(1))
 

@@ -13,7 +13,7 @@ except ImportError:
 
 from app.dbi import (
     save_instant,
-    save_outdoors_instant,
+    save_outdoor_instant,
 )
 from lcd import LCD
 import weather
@@ -32,8 +32,8 @@ def store_indoors_instant():
 
 
 @manager.command
-def store_outdoors_instant():
-    save_outdoors_instant()
+def store_outdoor_instant():
+    save_outdoor_instant()
 
 
 @manager.command

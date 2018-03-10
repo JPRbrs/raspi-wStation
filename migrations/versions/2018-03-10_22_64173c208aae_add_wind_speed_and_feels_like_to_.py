@@ -1,4 +1,4 @@
-"""Add wind speed and feels like to outdoors instant
+"""Add wind speed and feels like to outdoor instant
 
 Revision ID: 64173c208aae
 Revises: e869c1c289ff
