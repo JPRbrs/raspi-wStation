@@ -22,11 +22,6 @@ manager.add_command('db', MigrateCommand)
 
 
 @manager.command
-def hello():
-    print "hello"
-
-
-@manager.command
 def save_instant_into_db():
     save_instant()
 
