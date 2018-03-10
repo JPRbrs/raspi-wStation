@@ -32,7 +32,7 @@ def save_outdoors_instant():
         temperature=current_out_conditions['out_temperature'],
         humidity=current_out_conditions['out_humidity'],
         feels_like=current_out_conditions['feels_like'],
-        wind_direction=current_out_conditions['wind_speed'],
+        wind_speed=current_out_conditions['wind_speed'],
         timestamp=datetime.now().isoformat()
     )
 
