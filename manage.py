@@ -2,7 +2,9 @@ from datetime import datetime
 from time import sleep
 
 
-from flask_script import Manager
+from flask_script import (
+    Manager,
+)
 
 try:
     from app.dht import get_hum_and_temp
@@ -25,12 +27,12 @@ manager.add_command('db', MigrateCommand)
 
 
 @manager.command
-def save_instant_into_db():
+def store_indoors_instant():
     save_instant()
 
 
 @manager.command
-def save_outdoors_instant_into_db():
+def outdoors_instant():
     save_outdoors_instant()
 
 
