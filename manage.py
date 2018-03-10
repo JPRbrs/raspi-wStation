@@ -27,7 +27,7 @@ manager.add_command('db', MigrateCommand)
 
 
 @manager.command
-def store_indoors_instant():
+def store_indoor_instant():
     save_instant()
 
 
