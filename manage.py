@@ -32,7 +32,7 @@ def store_indoors_instant():
 
 
 @manager.command
-def outdoors_instant():
+def store_outdoors_instant():
     save_outdoors_instant()
 
 
