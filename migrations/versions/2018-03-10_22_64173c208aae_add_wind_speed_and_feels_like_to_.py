@@ -21,14 +21,14 @@ def upgrade():
         'outdoor_instants',
         sa.Column(
             'feels_like',
-            sa.Integer(),
-            nullable=False))
+            sa.Integer()
+        ))
     op.add_column(
         'outdoor_instants',
         sa.Column(
             'wind_speed',
             sa.Integer(),
-            nullable=False))
+        ))
 
 
 def downgrade():
