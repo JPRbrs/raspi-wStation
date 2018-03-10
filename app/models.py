@@ -31,11 +31,15 @@ class OutdoorInstant(db.Model):
     temperature = db.Column(db.Float, nullable=False)
     humidity = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.String(25), nullable=False)
+    feels_like = db.Column(db.Integer, nullable=False)
+    wind_speed = db.Column(db.Integer, nullable=False)
 
     json_attributes = (
         'temperature',
         'humidity',
-        'timestamp'
+        'timestamp',
+        'feels_like',
+        'wind_speed'
     )
 
     def __repr__(self):
