@@ -53,9 +53,10 @@ class OutdoorInstant(db.Model):
 
 class Day(object):
 
-    def __init__(self, date, instants):
+    def __init__(self, date, instants, outdoor_instants):
         self.date = date
         self.instants = instants
+        self.outdoor_instants = outdoor_instants
 
     def __repr__(self):
         return '<Day: {}>'.format(self.date)
@@ -70,5 +71,6 @@ class Day(object):
     def toJSON(self):
         return {
             'date': self.date,
-            'instants': [i.toJSON() for i in self.instants]
+            'instants': [i.toJSON() for i in self.instants],
+            'outdoor_instants': [j.toJSON() for j in self.outdoor_instants]
         }

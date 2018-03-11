@@ -56,8 +56,11 @@ def get_day(date):
     instants = Instant.query.filter(
         Instant.timestamp.like('{}%'.format(date))).all()
 
-    print date
-    day = Day(date, instants)
+    outdoor_instants = OutdoorInstant.query.filter(
+        OutdoorInstant.timestamp.like('{}%'.format(date))).all()
+
+    day = Day(date, instants, outdoor_instants)
+
     return day
 
 
