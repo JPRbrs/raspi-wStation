@@ -1,34 +1,39 @@
 from datetime import datetime
 from time import sleep
 
-from flask_migrate import Migrate, MigrateCommand
-from flask_script import Manager
-import weather
+
+from flask_script import (
+    Manager,
+)
+
 try:
     from app.dht import get_hum_and_temp
 except ImportError:
     print('Not running on the pi, some features won\'t be available')
 
-
-from app import app, db
-from app.dbi import save_instant
+from app.dbi import (
+    save_instant,
+    save_outdoor_instant,
+)
 from lcd import LCD
+import weather
+from app import app
+from flask_migrate import MigrateCommand
 
-
-migrate = Migrate(app, db)
 app.debug = True
+
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
 
 @manager.command
-def hello():
-    print "hello"
+def store_indoor_instant():
+    save_instant()
 
 
 @manager.command
-def save_instant_into_db():
-    save_instant()
+def store_outdoor_instant():
+    save_outdoor_instant()
 
 
 @manager.command
