@@ -4,8 +4,13 @@
 *.pyc
 *~
 .#*
-.cache/
+
+app.pid
 data.csv
 home.db
 secrets.py
+
+.cache/
+logs/
 venv/
+
