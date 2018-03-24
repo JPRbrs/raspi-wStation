@@ -94,19 +94,29 @@ def get_month(requested_date):
     days_in_month = get_number_of_days_in_month(requested_date)
     for day in xrange(1, days_in_month + 1):
         day_date = date(requested_date.year, requested_date.month, day)
-        day_instants = [i for i in instants if i.timestamp[:10] == date]
-        day_outdoor_instants = [i for i in outdoor_instants if
-                                i.timestamp[:9] == date]
-        days.append(Day(day_date, day_instants, day_outdoor_instants))
+        in_instants = [i for i in instants if
+                       timestamp_to_datetime(i.timestamp).date() == day_date]
+
+        out_instants = [i for i in outdoor_instants if
+                        timestamp_to_datetime(i.timestamp).date() == day_date]
+
+        days.append(Day(day_date, in_instants, out_instants))
+
+    ret_val = {
+        'days': days,
+        'avg_temps': [day.day_average('temperature') for day in days],
+        'avg_hum': [day.day_average('humidity') for day in days],
+    }
 
     import pdb; pdb.set_trace()
-    return days
+    return ret_val
 
 
 def get_all_instants():
     return Instant.query.all()
 
+
 def timestamp_to_datetime(timestamp):
     # test
     #datetime.strptime(Instant.query.limit(10).all()[4].timestamp, "%Y-%m-%dT%H:%M:%S")
-    return datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
+    return datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")

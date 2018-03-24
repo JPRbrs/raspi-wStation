@@ -67,11 +67,17 @@ class Day(object):
 
         for instant in self.instants:
             total_indoor += getattr(instant, attr)
-        average_indoor = total_indoor / len(self.instants)
+        if total_indoor != 0:
+            average_indoor = total_indoor / len(self.instants)
+        else:
+            average_indoor = 0
 
         for instant in self.outdoor_instants:
             total_indoor += getattr(instant, attr)
-        average_outdoor = total_outdoor / len(self.outdoor_instants)
+        if total_outdoor != 0:
+            average_outdoor = total_outdoor / len(self.outdoor_instants)
+        else:
+            average_outdoor = 0
 
         return (round(average_indoor, 1), round(average_outdoor, 1))
 
