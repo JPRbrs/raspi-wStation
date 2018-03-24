@@ -8,6 +8,7 @@ from app import app
 from models import Instant
 from app.dbi import (
     get_day,
+    get_latest,
 )
 from weather import (
     get_forecast,
@@ -44,8 +45,7 @@ def outdoor():
 def home_weather():
     """Page showing indoor temp and hum"""
 
-    # instant = get_latest()
-    instant = Instant(temperature=1, humidity=2, timestamp='2017-1-1')
+    instant = get_latest()
     return render_template('indoor.html', instant=instant)
 
 

@@ -15,14 +15,14 @@ function plot_data(canvas_id, xdata, in_data, out_data, label) {
             datasets: [{
                 fill: false,
                 lineTension: 0.23,
-                label: label,
+                label: 'indoor ' + label,
                 backgroundColor: 'rgb(255, 99, 132)',
                 borderColor: 'rgb(255, 99, 132)',
                 data: in_data,
             }, {
                 fill: false,
                 lineTension: 0.23,
-                label: label,
+                label: 'outdoor ' + label,
                 backgroundColor: 'rgb(255, 99, 255)',
                 borderColor: 'rgb(255, 99, 255)',
                 data: out_data,

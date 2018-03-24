@@ -41,9 +41,7 @@ def save_outdoor_instant():
 
 
 def get_latest():
-    timestamp = datetime.now().isoformat()
-    five_min_ago = (datetime.now() - timedelta(minutes=5)).isoformat()
-    print(timestamp, five_min_ago)
+    return Instant.query.order_by(Instant.timestamp.desc()).first()
 
 
 def get_last_week():

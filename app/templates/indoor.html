@@ -14,9 +14,8 @@
 
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 <div>
-  Latest measured temp: {{instant.temp}}<br>
-  Latest measured hum: {{instant.hum}}<br>
-  Time: {{instant.timestamp}}<br>
+  Current temp: {{instant.temperature}} C<br>
+  Current hum: {{instant.humidity}} %<br>
 </div>
 <canvas id="temp_chart" width="200" height="50"></canvas>
 <canvas id="hum_chart" width="200" height="50"></canvas>
