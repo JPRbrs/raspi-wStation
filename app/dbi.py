@@ -80,10 +80,10 @@ def get_month(requested_date):
     """
     This functions receives a string in format yyyy-mm-dd
     """
-    date = parse(requested_date).date()
+    requested_date = parse(requested_date).date()
 
     # Get all instants for given month
-    search_date = date.strftime('%Y-%m')
+    search_date = requested_date.strftime('%Y-%m')
     instants = Instant.query.filter(
         Instant.timestamp.like('{}%'.format(search_date))).all()
     outdoor_instants = OutdoorInstant.query.filter(
@@ -91,18 +91,22 @@ def get_month(requested_date):
 
     # Group instants by day
     days = []
-    days_in_month = get_number_of_days_in_month(date)
+    days_in_month = get_number_of_days_in_month(requested_date)
     for day in xrange(1, days_in_month + 1):
-        day_date = '{}-{}-{}'.format(date.year, zfill_int(date.month), day)
-        day_instants = [i for i in instants if i.timestamp[:9] == date]
+        day_date = date(requested_date.year, requested_date.month, day)
+        day_instants = [i for i in instants if i.timestamp[:10] == date]
         day_outdoor_instants = [i for i in outdoor_instants if
                                 i.timestamp[:9] == date]
         days.append(Day(day_date, day_instants, day_outdoor_instants))
 
     import pdb; pdb.set_trace()
-
     return days
 
 
 def get_all_instants():
     return Instant.query.all()
+
+def timestamp_to_datetime(timestamp):
+    # test
+    #datetime.strptime(Instant.query.limit(10).all()[4].timestamp, "%Y-%m-%dT%H:%M:%S")
+    return datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
