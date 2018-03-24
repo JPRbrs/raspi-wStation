@@ -66,12 +66,12 @@ function format_data(result) {
 
 $(document).ready(function() {
     $(function() {
-        $('#datepicker').datepicker({
+        $('#daypicker').datepicker({
             dateFormat: 'yy-mm-dd',
             onSelect: function (date) {
                 $.ajax({
                     type: 'POST',
-                    url: '/ajax_call',
+                    url: '/get_day_ajax',
                     data: JSON.stringify({date: date}),
                     contentType: 'application/json;charset=UTF-8',
                     success: function(result) {
@@ -85,4 +85,27 @@ $(document).ready(function() {
             }
         });
     });
+     $('#monthpicker').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'MM yy',
+         onClose: function(dateText, inst) {
+             var date = new Date(inst.selectedYear, inst.selectedMonth, 1);
+             $(this).datepicker('setDate', date);
+             $.ajax({
+                 type: 'POST',
+                 url: '/get_month_ajax',
+                 data: JSON.stringify({date: date}),
+                 contentType: 'application/json;charset=UTF-8',
+                 success: function(result) {
+                     var data = format_data(result);
+                     plot_data('temp_chart', data['time'], data['temp'],
+                               data['out_temp'], 'temperature');
+                     plot_data('hum_chart', data['time'], data['hum'],
+                               data['out_hum'], 'humidity');
+                 }
+             });
+         },
+     });
 });

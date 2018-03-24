@@ -3,7 +3,8 @@
 <script src="{{ url_for('static', filename='js/chart.js') }}"></script>
 <h1>Indoor Conditions</h1>
 <div id="output"></div>
-<p>Date:<input type="text" id="datepicker"></p>
+<p>Select day:<input type="text" id="daypicker"></p>
+<p>Select month:<input type="text" id="monthpicker"></p>
 {% raw %}
 <script id="template" type="text/ractive">
 </script>
@@ -14,6 +15,7 @@
 
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 <div>
+  <input id="month_mode"  type="checkbox">Month mode<br><br>
   Current temp: {{instant.temperature}} C<br>
   Current hum: {{instant.humidity}} %<br>
 </div>

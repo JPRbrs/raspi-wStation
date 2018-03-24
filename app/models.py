@@ -62,11 +62,18 @@ class Day(object):
         return '<Day: {}>'.format(self.date)
 
     def day_average(self, attr):
-        total = 0
+        total_indoor = 0
+        total_outdoor = 0
+
         for instant in self.instants:
-            total += getattr(instant, attr)
-        average = total / len(self.instants)
-        return round(average, 1)
+            total_indoor += getattr(instant, attr)
+        average_indoor = total_indoor / len(self.instants)
+
+        for instant in self.outdoor_instants:
+            total_indoor += getattr(instant, attr)
+        average_outdoor = total_outdoor / len(self.outdoor_instants)
+
+        return (round(average_indoor, 1), round(average_outdoor, 1))
 
     def toJSON(self):
         return {
