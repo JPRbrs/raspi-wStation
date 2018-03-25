@@ -57,14 +57,17 @@ def index():
 
 
 @app.route('/get_day_ajax', methods=['POST'])
-def get_dat_ajax():
-    date = request.json['date']
+def get_day_ajax():
+    requested_date = request.json['date']
 
-    return jsonify(get_day(date).toJSON())
+    return jsonify(get_day(requested_date).toJSON())
 
 
 @app.route('/get_month_ajax', methods=['POST'])
 def get_month_ajax():
-    date = request.json['date']
+    requested_date = request.json['date']
 
-    return jsonify(get_month(date).toJSON())
+    list_of_days = [day.get_averages() for
+                    day in get_month(requested_date)]
+
+    return jsonify(list_of_days)

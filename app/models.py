@@ -85,3 +85,14 @@ class Day(object):
             'outdoor_hum_avg': self.day_average(self.outdoor_instants,
                                                 'humidity')
         }
+
+    def get_averages(self):
+        return {
+            'date': self.date,
+            'indoor_temp_avg': self.day_average(self.instants, 'temperature'),
+            'indoor_hum_avg': self.day_average(self.instants, 'humidity'),
+            'outdoor_temp_avg': self.day_average(self.outdoor_instants,
+                                                 'temperature'),
+            'outdoor_hum_avg': self.day_average(self.outdoor_instants,
+                                                'humidity')
+        }

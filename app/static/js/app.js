@@ -99,11 +99,10 @@ $(document).ready(function() {
                  data: JSON.stringify({date: date}),
                  contentType: 'application/json;charset=UTF-8',
                  success: function(result) {
-                     var data = format_data(result);
-                     plot_data('temp_chart', data['time'], data['temp'],
-                               data['out_temp'], 'temperature');
-                     plot_data('hum_chart', data['time'], data['hum'],
-                               data['out_hum'], 'humidity');
+                     plot_data('temp_chart', result['date'], result['indoor_temp_avg'],
+                               result['outdoor_temp_avg'], 'temperature');
+                     plot_data('hum_chart', result['date'], result['indoor_hum_avg'],
+                               result['outdoor_hum_avg'], 'humidity');
                  }
              });
          },

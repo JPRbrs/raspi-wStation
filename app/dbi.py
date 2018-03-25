@@ -82,6 +82,7 @@ def get_month(requested_date):
     """
     This functions receives a string in format yyyy-mm-dd
     """
+
     requested_date = parse(requested_date).date()
 
     # Get all instants for given month
@@ -104,13 +105,7 @@ def get_month(requested_date):
 
         days.append(Day(day_date, in_instants, out_instants))
 
-    ret_val = {
-        'days': days,
-        'avg_temps': [day.day_average('temperature') for day in days],
-        'avg_hum': [day.day_average('humidity') for day in days],
-    }
-
-    return ret_val
+    return days
 
 
 def get_all_instants():
