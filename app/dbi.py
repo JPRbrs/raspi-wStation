@@ -7,7 +7,6 @@ from models import (
 from app import db
 from datetime import (
     datetime,
-    timedelta,
     date,
 )
 
@@ -53,14 +52,17 @@ def get_last_week():
     return last_week
 
 
-def get_day(date):
+def get_day(requested_date):
+    # year, month, day = map(int, requested_date.split('-'))
+    # formated_date = date(year, month, day)
+
     instants = Instant.query.filter(
-        Instant.timestamp.like('{}%'.format(date))).all()
+        Instant.timestamp.like('{}%'.format(requested_date))).all()
 
     outdoor_instants = OutdoorInstant.query.filter(
-        OutdoorInstant.timestamp.like('{}%'.format(date))).all()
+        OutdoorInstant.timestamp.like('{}%'.format(requested_date))).all()
 
-    day = Day(date, instants, outdoor_instants)
+    day = Day(requested_date, instants, outdoor_instants)
 
     return day
 
@@ -108,7 +110,6 @@ def get_month(requested_date):
         'avg_hum': [day.day_average('humidity') for day in days],
     }
 
-    import pdb; pdb.set_trace()
     return ret_val
 
 
