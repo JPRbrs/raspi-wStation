@@ -67,7 +67,6 @@ def get_day_ajax():
 def get_month_ajax():
     requested_date = request.json['date']
 
-    list_of_days = [day.get_averages() for
-                    day in get_month(requested_date)]
+    month = get_month(requested_date)
 
-    return jsonify(list_of_days)
+    return jsonify(month.toJSON())

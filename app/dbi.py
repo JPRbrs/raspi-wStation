@@ -1,4 +1,5 @@
 from models import (
+    AbsInstant,
     Day,
     Instant,
     OutdoorInstant,
@@ -9,8 +10,6 @@ from datetime import (
     datetime,
     date,
 )
-
-from dateutil.parser import parse
 
 from weather import get_weather
 
@@ -53,23 +52,27 @@ def get_last_week():
 
 
 def get_day(requested_date):
-    # year, month, day = map(int, requested_date.split('-'))
-    # formated_date = date(year, month, day)
-
+    # Receives data in format yy-mm-dd
     instants = Instant.query.filter(
         Instant.timestamp.like('{}%'.format(requested_date))).all()
 
     outdoor_instants = OutdoorInstant.query.filter(
         OutdoorInstant.timestamp.like('{}%'.format(requested_date))).all()
 
+    # import pdb; pdb.set_trace()
+
+    year, month, day = map(int, requested_date.split('-'))
+    requested_date = date(year, month, day)
     day = Day(requested_date, instants, outdoor_instants)
 
     return day
 
 
-def get_number_of_days_in_month(date_object):
-    month_start = date(date_object.year, date_object.month, 1)
-    next_month_start = date(date_object.year, date_object.month + 1, 1)
+def get_number_of_days_in_month(date_string):
+    # date received in format yy-mm-dd
+    year, month, day = map(int, date_string.split('-'))
+    month_start = date(year, month, 1)
+    next_month_start = date(year, month + 1, 1)
 
     return (next_month_start - month_start).days
 
@@ -80,13 +83,12 @@ def zfill_int(number):
 
 def get_month(requested_date):
     """
-    This functions receives a string in format yyyy-mm-dd
+    This functions receives a string in format yy-mm-dd
     """
 
-    requested_date = parse(requested_date).date()
-
+    year, month, day = map(int, requested_date.split('-'))
     # Get all instants for given month
-    search_date = requested_date.strftime('%Y-%m')
+    search_date = requested_date[:4]
     instants = Instant.query.filter(
         Instant.timestamp.like('{}%'.format(search_date))).all()
     outdoor_instants = OutdoorInstant.query.filter(
@@ -96,16 +98,33 @@ def get_month(requested_date):
     days = []
     days_in_month = get_number_of_days_in_month(requested_date)
     for day in xrange(1, days_in_month + 1):
-        day_date = date(requested_date.year, requested_date.month, day)
+        day_date = date(year, month, day)
         in_instants = [i for i in instants if
                        timestamp_to_datetime(i.timestamp).date() == day_date]
 
         out_instants = [i for i in outdoor_instants if
                         timestamp_to_datetime(i.timestamp).date() == day_date]
 
-        days.append(Day(day_date, in_instants, out_instants))
+        days.append(Day(day_date.strftime('%d-%m-%Y'), in_instants,
+                        out_instants))
 
-    return days
+    # Calculate day averages so a month is "a day" where each instant is
+    # a day_average
+    avg_instants = []
+    avg_outdoor_instants = []
+
+    for day in days:
+        averages = day.get_averages()
+        avg_instants.append(AbsInstant(
+            averages['date'],
+            averages['indoor_temp_avg'],
+            averages['indoor_hum_avg']))
+        avg_outdoor_instants.append(AbsInstant(
+            averages['date'],
+            averages['outdoor_temp_avg'],
+            averages['outdoor_hum_avg']))
+
+    return Day(requested_date, avg_instants, avg_outdoor_instants)
 
 
 def get_all_instants():
@@ -115,4 +134,9 @@ def get_all_instants():
 def timestamp_to_datetime(timestamp):
     # test
     #datetime.strptime(Instant.query.limit(10).all()[4].timestamp, "%Y-%m-%dT%H:%M:%S")
-    return datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+    try:
+        ret_val = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
+    except ValueError:
+        ret_val = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S")
+
+    return ret_val

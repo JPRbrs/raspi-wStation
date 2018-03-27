@@ -1,6 +1,28 @@
 from app import db
 
 
+class AbsInstant(object):
+
+    def __init__(self, timestamp, temperature, humidity):
+        self.timestamp = timestamp
+        self.temperature = temperature
+        self.humidity = humidity
+
+    json_attributes = (
+        'temperature',
+        'humidity',
+        'timestamp'
+    )
+
+    def __repr__(self):
+        return '<Instant: {}>'.format(self.timestamp)
+
+    def toJSON(self):
+        return {
+            key: getattr(self, key) for key in self.json_attributes
+        }
+
+
 class Instant(db.Model):
 
     __tablename__ = 'instants'
