@@ -49,10 +49,10 @@ def get_forecast(days_from_today):
         'day_text': forecast['day']['text'],
         'day_humidity': forecast['day']['humidity'],
         'day_precip': forecast['day']['chance_precip'],
-        'day_wind': forecast['day']['wind']['speed'],
+        'day_wind': forecast['day']['wind']['gust'],
         'night_text': forecast['night']['text'],
         'night_humidity': forecast['night']['humidity'],
         'night_precip': forecast['night']['chance_precip'],
-        'night_wind': forecast['night']['wind']['speed']
+        'night_wind': forecast['night']['wind']['gust']
     }
     return ret_dict
