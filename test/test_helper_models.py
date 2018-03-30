@@ -27,6 +27,17 @@ def generate_instant(timestamp):
     )
 
 
+def generate_day():
+    instants = []
+    outdoor_instants = []
+
+    for timestamp in generate_timestamps():
+        instants.append(generate_instant(timestamp))
+        outdoor_instants.append(generate_instant(timestamp))
+
+    return Day(timestamp, instants, outdoor_instants)
+
+
 class TestHelpers:
 
     def test_generate_instant(self):
@@ -43,6 +54,13 @@ class TestHelpers:
         assert timestamps[0] == '2018-03-30T00:00:24.279411'
         assert timestamps[len(timestamps) - 1] == '2018-03-30T23:55:24.279411'
         assert len(timestamps) == 288
+
+    def test_generate_day(self):
+        day = generate_day()
+
+        assert len(day.instants) == 288
+        assert len(day.outdoor_instants) == 288  # Check it has all params
+        assert day.timestamp is not None  # Check it has the desired format
 
 
 class TestDay:
