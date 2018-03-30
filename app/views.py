@@ -5,11 +5,13 @@ from flask import (
 )
 
 from app import app
-from models import Instant
+
 from app.dbi import (
     get_day,
     get_latest,
+    get_month
 )
+
 from weather import (
     get_forecast,
     get_weather,
@@ -54,8 +56,17 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/ajax_call', methods=['POST'])
-def ajax():
-    date = request.json['date']
+@app.route('/get_day_ajax', methods=['POST'])
+def get_day_ajax():
+    requested_date = request.json['date']
 
-    return jsonify(get_day(date).toJSON())
+    return jsonify(get_day(requested_date).toJSON())
+
+
+@app.route('/get_month_ajax', methods=['POST'])
+def get_month_ajax():
+    requested_date = request.json['date']
+
+    month = get_month(requested_date)
+
+    return jsonify(month.toJSON())

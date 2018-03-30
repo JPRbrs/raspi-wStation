@@ -51,7 +51,7 @@ function format_data(result) {
     var out_hum = [];
 
     result.instants.forEach((instant) => {
-        time.push(instant.timestamp.slice(11, 16));
+        time.push(instant.timestamp);
         temp.push(instant.temperature);
         hum.push(instant.humidity);
     });
@@ -66,12 +66,12 @@ function format_data(result) {
 
 $(document).ready(function() {
     $(function() {
-        $('#datepicker').datepicker({
+        $('#daypicker').datepicker({
             dateFormat: 'yy-mm-dd',
             onSelect: function (date) {
                 $.ajax({
                     type: 'POST',
-                    url: '/ajax_call',
+                    url: '/get_day_ajax',
                     data: JSON.stringify({date: date}),
                     contentType: 'application/json;charset=UTF-8',
                     success: function(result) {
@@ -85,4 +85,32 @@ $(document).ready(function() {
             }
         });
     });
+     $('#monthpicker').datepicker({
+        changeMonth: true,
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'yy-mm-dd',
+         onClose: function(date) {
+             $(this).datepicker('setDate', date);
+             $.ajax({
+                 type: 'POST',
+                 url: '/get_month_ajax',
+                 data: JSON.stringify({date: date}),
+                 contentType: 'application/json;charset=UTF-8',
+                 // success: function(result) {
+                 //     plot_data('temp_chart', result['date'], result['indoor_temp_avg'],
+                 //               result['outdoor_temp_avg'], 'temperature');
+                 //     plot_data('hum_chart', result['date'], result['indoor_hum_avg'],
+                 //               result['outdoor_hum_avg'], 'humidity');
+                 // }
+                 success: function(result) {
+                     var data = format_data(result);
+                     plot_data('temp_chart', data['time'], data['temp'],
+                               data['out_temp'], 'temperature');
+                     plot_data('hum_chart', data['time'], data['hum'],
+                               data['out_hum'], 'humidity');
+                 }
+             });
+         },
+     });
 });
