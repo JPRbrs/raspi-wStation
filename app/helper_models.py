@@ -23,7 +23,7 @@ class AbsInstant(object):
 class Day(object):
 
     def __init__(self, date, instants, outdoor_instants):
-        self.date = date
+        self.date = date  # yy-mm-dd format
         self.instants = instants
         self.outdoor_instants = outdoor_instants
 
