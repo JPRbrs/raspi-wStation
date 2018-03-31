@@ -6,6 +6,8 @@ var app = new Ractive({
         }
 });
 
+var month_mode;
+
 function plot_data(canvas_id, xdata, in_data, out_data, label) {
     var ctx = document.getElementById(canvas_id);
     new Chart(ctx, {
@@ -64,14 +66,30 @@ function format_data(result) {
     return data;
 }
 
+$('#loadingDiv')
+    .hide()  // Hide it initially
+    .ajaxStart(function() {
+        $(this).show();
+    })
+    .ajaxStop(function() {
+        $(this).hide();
+    })
+;
+
 $(document).ready(function() {
+    $('#month_mode').click(function() {
+        month_mode = $('#month_mode').is(':checked');
+    });
     $(function() {
         $('#daypicker').datepicker({
             dateFormat: 'yy-mm-dd',
+            changeMonth: true,
+            changeYear: true,
+            showButtonPanel: true,
             onSelect: function (date) {
                 $.ajax({
                     type: 'POST',
-                    url: '/get_day_ajax',
+                    url: month_mode ? '/get_month_ajax' : '/get_day_ajax',
                     data: JSON.stringify({date: date}),
                     contentType: 'application/json;charset=UTF-8',
                     success: function(result) {
@@ -82,35 +100,8 @@ $(document).ready(function() {
                                   data['out_hum'], 'humidity');
                     }
                 });
+                console.log(month_mode ? 'month' : 'day');
             }
         });
     });
-     $('#monthpicker').datepicker({
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'yy-mm-dd',
-         onClose: function(date) {
-             $(this).datepicker('setDate', date);
-             $.ajax({
-                 type: 'POST',
-                 url: '/get_month_ajax',
-                 data: JSON.stringify({date: date}),
-                 contentType: 'application/json;charset=UTF-8',
-                 // success: function(result) {
-                 //     plot_data('temp_chart', result['date'], result['indoor_temp_avg'],
-                 //               result['outdoor_temp_avg'], 'temperature');
-                 //     plot_data('hum_chart', result['date'], result['indoor_hum_avg'],
-                 //               result['outdoor_hum_avg'], 'humidity');
-                 // }
-                 success: function(result) {
-                     var data = format_data(result);
-                     plot_data('temp_chart', data['time'], data['temp'],
-                               data['out_temp'], 'temperature');
-                     plot_data('hum_chart', data['time'], data['hum'],
-                               data['out_hum'], 'humidity');
-                 }
-             });
-         },
-     });
 });
