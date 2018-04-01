@@ -80,16 +80,16 @@ $(document).ready(function() {
             showButtonPanel: true,
             onSelect: function (date) {
                 $('#loadingDiv').show();
-                $('#hum_chart').hide();
-                $('#temp_chart').hide();
+                $('#hum_chart').replaceWith(
+                    '<canvas id="hum_chart" width="200" height="50"></canvas>');
+                $('#temp_chart').replaceWith(
+                    '<canvas id="temp_chart" width="200" height="50"></canvas>');
                 $.ajax({
                     type: 'POST',
                     url: month_mode ? '/get_month_ajax' : '/get_day_ajax',
                     data: JSON.stringify({date: date}),
                     contentType: 'application/json;charset=UTF-8',
                     success: function(result) {
-                        $('#hum_chart').show();
-                        $('#temp_chart').show();
                         $('#loadingDiv').hide();
                         var data = format_data(result);
                         plot_data('temp_chart', data['time'], data['temp'],
