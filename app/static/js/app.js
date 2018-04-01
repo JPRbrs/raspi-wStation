@@ -66,17 +66,9 @@ function format_data(result) {
     return data;
 }
 
-$('#loadingDiv')
-    .hide()  // Hide it initially
-    .ajaxStart(function() {
-        $(this).show();
-    })
-    .ajaxStop(function() {
-        $(this).hide();
-    })
-;
 
 $(document).ready(function() {
+    $('#loadingDiv').hide();
     $('#month_mode').click(function() {
         month_mode = $('#month_mode').is(':checked');
     });
@@ -87,12 +79,18 @@ $(document).ready(function() {
             changeYear: true,
             showButtonPanel: true,
             onSelect: function (date) {
+                $('#loadingDiv').show();
+                $('#hum_chart').hide();
+                $('#temp_chart').hide();
                 $.ajax({
                     type: 'POST',
                     url: month_mode ? '/get_month_ajax' : '/get_day_ajax',
                     data: JSON.stringify({date: date}),
                     contentType: 'application/json;charset=UTF-8',
                     success: function(result) {
+                        $('#hum_chart').show();
+                        $('#temp_chart').show();
+                        $('#loadingDiv').hide();
                         var data = format_data(result);
                         plot_data('temp_chart', data['time'], data['temp'],
                                   data['out_temp'], 'temperature');
@@ -100,7 +98,6 @@ $(document).ready(function() {
                                   data['out_hum'], 'humidity');
                     }
                 });
-                console.log(month_mode ? 'month' : 'day');
             }
         });
     });

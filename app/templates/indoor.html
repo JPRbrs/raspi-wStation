@@ -10,12 +10,10 @@ Current hum: {{instant.humidity}} %<br>
 <p id="loadingDiv">Loading...</p>
 <canvas id="temp_chart" width="200" height="50"></canvas>
 <canvas id="hum_chart" width="200" height="50"></canvas>
-</div>
 {% raw %}
 <script id="template" type="text/ractive">
 </script>
 {% endraw %}
-<div id="viz"></div>
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 {% endblock %}
 
