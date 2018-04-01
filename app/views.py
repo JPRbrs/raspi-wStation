@@ -25,12 +25,12 @@ def buses():
     """
     Show next buses
     """
-    next_bus = get_next_bus(stop_id=portcullis['primaryCode'], max_items=1)
-    bus = {
-        'number': next_bus['groupID'],
-        'time': next_bus['timeLabel']
-    }
-    return render_template('buses.html', bus=bus)
+    buses = [{
+        'number': bus['groupID'],
+        'time': bus['timeLabel']
+    } for bus in get_next_bus(stop_id=portcullis['primaryCode'], max_items=4)]
+
+    return render_template('buses.html', buses=buses)
 
 
 @app.route('/outdoor')

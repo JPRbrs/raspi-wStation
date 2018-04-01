@@ -5,18 +5,25 @@ source:
 https://code.google.com/p/python-weather-api/wiki/Examples#Weather.com
 """
 
+from datetime import (
+    datetime,
+    timedelta,
+)
+
 import pywapi
-# TODO add address to secrets
+
+from secrets import post_code
 
 
 def get_weather():
     """
     Returns a dict with the weather info to stored in the database
     """
-    weather = pywapi.get_weather_from_weather_com('BS16:4:UK')
+    weather = pywapi.get_weather_from_weather_com(post_code)
     curr_cond = weather['current_conditions']
 
     ret_dict = {
+        'date': datetime.now().strftime('%A %d %B'),
         'feels_like': int(curr_cond['feels_like']),
         'out_temperature': int(curr_cond['temperature']),
         'out_humidity': int(curr_cond['humidity']),
@@ -41,7 +48,7 @@ def get_forecast(days_from_today):
     forecast = weather['forecasts'][days_from_today]
 
     ret_dict = {
-        'date': forecast['date'],
+        'date': (datetime.now() + timedelta(days=1)).strftime('%A %d %B'),
         'high': forecast['high'],
         'low': forecast['low'],
         'sunrise': forecast['sunrise'],
