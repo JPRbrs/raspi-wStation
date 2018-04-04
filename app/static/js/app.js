@@ -1,9 +1,14 @@
-var app = new Ractive({
-    el: '#output',
+var ractive = new Ractive({
+    target: '#output',
     template: '#template',
     data: {
-        foo: 'test'
-        }
+     items: [
+         {page:' outdoor', image: '/static/images/outdoor.png'},
+         {page: 'buses', image: '/static/images/bus.png'},
+         {page: 'home_weather', image: '/static/images/house.png'},
+         {page: 'video', image: '/static/images/camera.png'}
+    ]
+  },
 });
 
 function plot_data(canvas_id, xdata, in_data, out_data, label) {
@@ -97,12 +102,6 @@ $(document).ready(function() {
                  url: '/get_month_ajax',
                  data: JSON.stringify({date: date}),
                  contentType: 'application/json;charset=UTF-8',
-                 // success: function(result) {
-                 //     plot_data('temp_chart', result['date'], result['indoor_temp_avg'],
-                 //               result['outdoor_temp_avg'], 'temperature');
-                 //     plot_data('hum_chart', result['date'], result['indoor_hum_avg'],
-                 //               result['outdoor_hum_avg'], 'humidity');
-                 // }
                  success: function(result) {
                      var data = format_data(result);
                      plot_data('temp_chart', data['time'], data['temp'],
