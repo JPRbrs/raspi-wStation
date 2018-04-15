@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 {% block body %}
-<h1>Next bus</h1>
-  <div>
-    Next Bus: {{ bus.number }}<br>
-    Minutes: {{ bus.time }}<br>
-  </div>
+<h1>Next buses</h1>
+<div>
+  {% for bus in buses %}
+  Bus: {{ bus.number }}<br>
+  Minutes: {{ bus.time }}<br>
+  <br>
+  {% endfor %}
+</div>
 {% endblock %}

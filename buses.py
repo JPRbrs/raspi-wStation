@@ -16,7 +16,7 @@ def get_next_bus(stop_id, max_items=1):
     }
 
     response = requests.get(url, data=None, headers=headers)
-    response_rows = response.json()['data']['stopBoards'][0]['rows'][0]
+    response_rows = response.json()['data']['stopBoards'][0]['rows']
 
     # next_buses = {
     #     'number': row['groupID'],
