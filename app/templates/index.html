@@ -4,33 +4,22 @@
 <div id="output"></div>
 {% raw %}
 <script id="template" type="text/ractive">
-  <h2>{{ foo }}</h2>
+  <ul class='todos'>
+	  {{#each items: i}}
+	  	{{>item}}
+	  {{/each}}
+	</ul>
+  {{#partial item}}
+    <a href={{.page}}>
+      <div class="card">
+      <div class="container">
+        <h4><b>{{.page}}</b></h4>
+        <img src="{{.image}}" alt="Avatar" style="width:15%">
+      </div>
+      </div>
+    </a><br>
+    {{/partial}}
 </script>
 {% endraw %}
-<div>
-  <a href='home_weather'>
-    <div class="card">
-      <img src="{{ url_for('static', filename='images/house.png') }}" alt="Avatar" style="width:15%">
-      <div class="container">
-        <h4><b>Indoor weather</b></h4>
-      </div>
-    </div>
-  </a>
-  <a href='outdoor'>
-    <div class="card">
-      <img src="{{ url_for('static', filename='images/outdoor.png') }}" alt="Avatar" style="width:15%">
-      <div class="container">
-        <h4><b>Outdoor weather</b></h4>
-      </div>
-    </div>
-  </a>
-  <a href='buses'>
-    <div class="card">
-      <img src="{{ url_for('static', filename='images/bus.png') }}" alt="Avatar" style="width:15%">
-      <div class="container">
-        <h4><b>Next Bus</b></h4>
-      </div>
-    </div>
-  </a>
-</div>
+
 {% endblock %}

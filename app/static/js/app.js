@@ -1,9 +1,14 @@
-var app = new Ractive({
-    el: '#output',
+var ractive = new Ractive({
+    target: '#output',
     template: '#template',
     data: {
-        foo: 'test'
-        }
+     items: [
+         {page:' outdoor', image: '/static/images/outdoor.png'},
+         {page: 'buses', image: '/static/images/bus.png'},
+         {page: 'home_weather', image: '/static/images/house.png'},
+         {page: 'video', image: '/static/images/camera.png'}
+    ]
+  },
 });
 
 var month_mode;

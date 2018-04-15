@@ -16,7 +16,7 @@ from weather import (
     get_forecast,
     get_weather,
 )
-from secrets import portcullis
+from secrets import portcullis, url
 from buses import get_next_bus
 
 
@@ -54,6 +54,11 @@ def home_weather():
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+@app.route('/video')
+def video():
+    return render_template('video.html', url=url)
 
 
 @app.route('/get_day_ajax', methods=['POST'])
