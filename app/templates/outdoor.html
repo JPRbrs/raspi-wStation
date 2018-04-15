@@ -5,9 +5,8 @@
   <title>Home weather station</title>
 </head>
 <body>
-  <h1>Outdoor Conditions</h1>
   <div>
-    <h2>Today - {{ forecast.date }}</h2>
+    <h2>Today - {{ today.date }}</h2>
     <p> It is {{ today.out_conditions }} and feels like: {{ today.feels_like }} C</p>
     <p> Temperature: {{ today.out_temperature }} C</p>
     <p> Humidity: {{ today.out_humidity }} %</p>
@@ -15,11 +14,11 @@
     <p> Wind direction: {{ today.wind_direction }}</p>
     <p> Wind speed: {{ today.wind_speed }} km/h</p>
     <br>
+    <h2>Tomorrow - {{forecast.date }}</h2>
+    <br>
     <p>Max/min: {{ forecast.high }} C / {{ forecast.low }} C</p>
     <p>Sunrise: {{ forecast.sunrise }}</p>
     <p>Sunset: {{ forecast.sunset }}</p>
-    <br>
-    <h2>Tomorrow</h2>
     <h3>Day - {{ forecast.day_text }}</h3>
     <p>Humidity: {{ forecast.day_humidity }}</p>
     <p>Chance of rain: {{ forecast.day_precip }}</p>
