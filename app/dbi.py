@@ -1,11 +1,8 @@
 from models import (
-    Instant,
-    OutdoorInstant,
-)
-
-from helper_models import (
     AbsInstant,
     Day,
+    Instant,
+    OutdoorInstant,
 )
 
 from app import db
@@ -48,6 +45,12 @@ def get_latest():
     return Instant.query.order_by(Instant.timestamp.desc()).first()
 
 
+def get_last_week():
+    last_week = db.session.query(Instant).filter(
+        Instant.timestamp > '2018-01-01').all()
+    return last_week
+
+
 def get_day(requested_date):
     # Receives data in format yy-mm-dd
     instants = Instant.query.filter(
@@ -55,8 +58,6 @@ def get_day(requested_date):
 
     outdoor_instants = OutdoorInstant.query.filter(
         OutdoorInstant.timestamp.like('{}%'.format(requested_date))).all()
-
-    # import pdb; pdb.set_trace()
 
     year, month, day = map(int, requested_date.split('-'))
     requested_date = date(year, month, day)
@@ -129,9 +130,6 @@ def get_all_instants():
 
 
 def timestamp_to_datetime(timestamp):
-    # test
-    # datetime.strptime(
-    #     Instant.query.limit(10).all()[4].timestamp, "%Y-%m-%dT%H:%M:%S")
     try:
         ret_val = datetime.strptime(timestamp, "%Y-%m-%dT%H:%M:%S.%f")
     except ValueError:
