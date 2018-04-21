@@ -1,0 +1,10 @@
+The library used to get the weather conditios is [[https://code.google.com/archive/p/python-weather-api/][pywapi]].
+It can be found on the lib/ folder
+To install it, untar the source distribution and run:
+ $ python
+   #+BEGIN_SRC
+   setup.py build $ python setup.py install
+   #+END_SRC
+
+* TODO calculate day average everyday at midnight and store it in db
+* TODO improve front end
