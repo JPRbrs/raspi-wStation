@@ -6,7 +6,8 @@ from models import (
 
 
 from app import db
-from app.helper_models import Day
+from app.helper_models import DayCreator
+from app.models import Day
 from datetime import (
     datetime,
     date,
@@ -62,9 +63,24 @@ def get_day(requested_date):
 
     year, month, day = map(int, requested_date.split('-'))
     requested_date = date(year, month, day)
-    day = Day(requested_date, instants, outdoor_instants)
+    day = DayCreator(requested_date, instants, outdoor_instants)
 
     return day
+
+
+def store_day(date):
+    day = get_day(date).to_json()
+
+    day_db_model = Day(
+        day['date'],
+        day['indoor_avg_temp'],
+        day['indoor_avg_hum'],
+        day['outdoor_avg_temp'],
+        day['outdoor_hum_avg']
+    )
+
+    db.session.add(day_db_model)
+    db.session.commit()
 
 
 def get_number_of_days_in_month(date_string):
@@ -104,7 +120,7 @@ def get_month(requested_date):
         out_instants = [i for i in outdoor_instants if
                         timestamp_to_datetime(i.timestamp).date() == day_date]
 
-        days.append(Day(day_date.strftime('%d-%m-%Y'), in_instants,
+        days.append(DayCreator(day_date.strftime('%d-%m-%Y'), in_instants,
                         out_instants))
 
     # Calculate day averages so a month is "a day" where each instant is
@@ -123,7 +139,7 @@ def get_month(requested_date):
             averages['outdoor_temp_avg'],
             averages['outdoor_hum_avg']))
 
-    return Day(requested_date, avg_instants, avg_outdoor_instants)
+    return DayCreator(requested_date, avg_instants, avg_outdoor_instants)
 
 
 def get_all_instants():

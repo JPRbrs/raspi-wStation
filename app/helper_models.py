@@ -20,7 +20,7 @@ class AbsInstant(object):
         }
 
 
-class Day(object):
+class DayCreator(object):
 
     def __init__(self, date, instants, outdoor_instants):
         self.date = date  # yy-mm-dd format
