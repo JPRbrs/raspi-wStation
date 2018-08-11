@@ -1,11 +1,12 @@
 from models import (
     AbsInstant,
-    Day,
     Instant,
     OutdoorInstant,
 )
 
+
 from app import db
+from app.helper_models import Day
 from datetime import (
     datetime,
     date,

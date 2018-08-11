@@ -74,39 +74,30 @@ class OutdoorInstant(db.Model):
         }
 
 
-class Day(object):
+class Day(db.Model):
 
-    def __init__(self, date, instants, outdoor_instants):
-        self.date = date
-        self.instants = instants
-        self.outdoor_instants = outdoor_instants
+    __tablename__ = 'days'
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.String(25), nullable=False)
+    indoor_avg_temp = db.Column(db.Float, nullable=False)
+    indoor_avg_hum = db.Column(db.Float, nullable=False)
+    outdoor_avg_temp = db.Column(db.Float, nullable=False)
+    outdoor_avg_hum = db.Column(db.Float, nullable=False)
+
+    json_attributes = {
+        'date',
+        'indoor_avg_temp',
+        'indoor_avg_hum',
+        'outdoor_avg_temp',
+        'outdoor_hum_avg'
+    }
 
     def __repr__(self):
-        return '<Day: {}>'.format(self.date)
-
-    def day_average(self, array, attr):
-        total = 0
-
-        for instant in array:
-            total += getattr(instant, attr)
-        if total != 0:
-            average = total / len(array)
-        else:
-            average = 0
-
-        return round(average, 1)
+        return 'Day {}'.format(self.date)
 
     def toJSON(self):
         return {
-            'date': self.date,
-            'instants': [i.toJSON() for i in self.instants],
-            'outdoor_instants': [j.toJSON() for j in self.outdoor_instants],
-            'indoor_temp_avg': self.day_average(self.instants, 'temperature'),
-            'indoor_hum_avg': self.day_average(self.instants, 'humidity'),
-            'outdoor_temp_avg': self.day_average(self.outdoor_instants,
-                                                 'temperature'),
-            'outdoor_hum_avg': self.day_average(self.outdoor_instants,
-                                                'humidity')
+            key: getattr(self, key) for key in self.json_attributes
         }
 
     def get_averages(self):
