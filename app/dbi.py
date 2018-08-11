@@ -69,7 +69,7 @@ def get_day(requested_date):
 
 
 def store_day(date):
-    day = get_day(date).to_json()
+    day = get_day(date).toJSON()
 
     day_db_model = Day(
         date=day['date'],
