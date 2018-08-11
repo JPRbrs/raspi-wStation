@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from time import sleep
 
 
@@ -14,6 +14,7 @@ except ImportError:
 from app.dbi import (
     save_instant,
     save_outdoor_instant,
+    store_day
 )
 from lcd import LCD
 import weather
@@ -29,6 +30,12 @@ manager.add_command('db', MigrateCommand)
 @manager.command
 def store_indoor_instant():
     save_instant()
+
+
+@manager.command
+def store_yesterday_averages():
+    yesterday = (date.today() - timedelta(hours=24)).strftime('%Y-%m-%d')
+    store_day(yesterday)
 
 
 @manager.command
