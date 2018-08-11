@@ -43,7 +43,7 @@ def outdoor():
                            forecast=get_forecast(1))
 
 
-@app.route('/home_weather')
+@app.route('/indoor')
 def home_weather():
     """Page showing indoor temp and hum"""
 
