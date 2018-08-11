@@ -47,11 +47,11 @@ class DayCreator(object):
             'date': self.date,
             'instants': [i.toJSON() for i in self.instants],
             'outdoor_instants': [j.toJSON() for j in self.outdoor_instants],
-            'indoor_temp_avg': self.day_average(self.instants, 'temperature'),
-            'indoor_hum_avg': self.day_average(self.instants, 'humidity'),
-            'outdoor_temp_avg': self.day_average(self.outdoor_instants,
+            'indoor_avg_temp': self.day_average(self.instants, 'temperature'),
+            'indoor_avg_hum': self.day_average(self.instants, 'humidity'),
+            'outdoor_avg_temp': self.day_average(self.outdoor_instants,
                                                  'temperature'),
-            'outdoor_hum_avg': self.day_average(self.outdoor_instants,
+            'outdoor_avg_hum': self.day_average(self.outdoor_instants,
                                                 'humidity')
         }
 

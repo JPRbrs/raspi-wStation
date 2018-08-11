@@ -72,11 +72,11 @@ def store_day(date):
     day = get_day(date).to_json()
 
     day_db_model = Day(
-        day['date'],
-        day['indoor_avg_temp'],
-        day['indoor_avg_hum'],
-        day['outdoor_avg_temp'],
-        day['outdoor_hum_avg']
+        date=day['date'],
+        indoor_avg_temp=day['indoor_avg_temp'],
+        indor_avg_hum=day['indoor_avg_hum'],
+        outdoor_avg_temp=day['outdoor_avg_temp'],
+        outdoor_avg_hum=day['outdoor_avg_hum']
     )
 
     db.session.add(day_db_model)
