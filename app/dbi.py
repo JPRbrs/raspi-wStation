@@ -54,9 +54,13 @@ def get_last_week():
 
 
 def get_day(requested_date):
-    # Receives data in format yy-mm-dd
+    '''Gets all instants from the database for requested_date (with format
+    yy-mm-dd), creates a DayCreator instance and pupulates a Day instance
+
+    '''
     instants = Instant.query.filter(
-        Instant.timestamp.like('{}%'.format(requested_date))).all()
+        Instant.timestamp.like('{}%'.format(requested_date))
+    ).all()
 
     outdoor_instants = OutdoorInstant.query.filter(
         OutdoorInstant.timestamp.like('{}%'.format(requested_date))).all()
