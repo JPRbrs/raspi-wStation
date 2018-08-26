@@ -39,6 +39,17 @@ def store_yesterday_averages():
 
 
 @manager.command
+def create_all_past_days():
+    today = datetime.date.today()
+    first_day = datetime.date(2017, 9, 7)
+
+    day = first_day
+    while day < today:
+        store_day(day)
+        day += datetime.timedelta(days=1)
+
+
+@manager.command
 def store_outdoor_instant():
     save_outdoor_instant()
 
