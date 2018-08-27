@@ -1,3 +1,6 @@
+import logging
+import logging.config
+
 from models import (
     AbsInstant,
     Instant,
@@ -14,6 +17,33 @@ from datetime import (
 )
 
 from weather import get_weather
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'standard': {
+            'format': '%(levelname)-8s:%(name)-20s: %(message)s '
+            '(%(asctime)s; %(filename)s:%(lineno)d)',
+            'datefmt': "%Y-%m-%d %H:%M:%S",
+        }
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'formatter': 'standard',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    }
+}
+
+logging.config.dictConfig(LOGGING)
 
 try:
     from dht import get_hum_and_temp
@@ -104,46 +134,32 @@ def get_month(requested_date):
     """
     This functions receives a string in format yy-mm-dd
     """
+    logging.info("Entering get_month")
+    days = Day.query.filter(Day.date.contains(requested_date[0:-3])).all()
 
-    year, month, day = map(int, requested_date.split('-'))
-    # Get all instants for given month
-    search_date = requested_date[:4]
-    instants = Instant.query.filter(
-        Instant.timestamp.like('{}%'.format(search_date))).all()
-    outdoor_instants = OutdoorInstant.query.filter(
-        OutdoorInstant.timestamp.like('{}%'.format(search_date))).all()
-
-    # Group instants by day
-    days = []
-    days_in_month = get_number_of_days_in_month(requested_date)
-    for day in xrange(1, days_in_month + 1):
-        day_date = date(year, month, day)
-        in_instants = [i for i in instants if
-                       timestamp_to_datetime(i.timestamp).date() == day_date]
-
-        out_instants = [i for i in outdoor_instants if
-                        timestamp_to_datetime(i.timestamp).date() == day_date]
-
-        days.append(DayCreator(day_date.strftime('%d-%m-%Y'), in_instants,
-                        out_instants))
-
-    # Calculate day averages so a month is "a day" where each instant is
-    # a day_average
-    avg_instants = []
-    avg_outdoor_instants = []
+    instants = []
+    outdoor_instants = []
 
     for day in days:
-        averages = day.get_averages()
-        avg_instants.append(AbsInstant(
-            averages['date'],
-            averages['indoor_temp_avg'],
-            averages['indoor_hum_avg']))
-        avg_outdoor_instants.append(AbsInstant(
-            averages['date'],
-            averages['outdoor_temp_avg'],
-            averages['outdoor_hum_avg']))
+        instants.append({
+            'timestamp': day.date,
+            'temperature': day.indoor_avg_temp,
+            'humidity': day.indoor_avg_hum
+        })
 
-    return DayCreator(requested_date, avg_instants, avg_outdoor_instants)
+        outdoor_instants.append({
+            'timestamp': day.date,
+            'temperature': day.outdoor_avg_temp,
+            'humidity': day.outdoor_avg_hum
+        })
+
+    logging.info("Days returned = {}".format(len(days)))
+
+    return {
+        'instants': instants,
+        'outdoor_instants': outdoor_instants,
+        'total_days': len(days)
+    }
 
 
 def get_all_instants():

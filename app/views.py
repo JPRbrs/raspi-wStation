@@ -1,3 +1,5 @@
+import json
+
 from flask import (
     jsonify,
     request,
@@ -74,4 +76,4 @@ def get_month_ajax():
 
     month = get_month(requested_date)
 
-    return jsonify(month.toJSON())
+    return jsonify(month)
