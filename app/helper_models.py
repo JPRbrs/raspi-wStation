@@ -20,7 +20,7 @@ class AbsInstant(object):
         }
 
 
-class Day(object):
+class DayCreator(object):
 
     def __init__(self, date, instants, outdoor_instants):
         self.date = date  # yy-mm-dd format
@@ -30,7 +30,7 @@ class Day(object):
     def __repr__(self):
         return '<Day: {}>'.format(self.date)
 
-    def day_average(self, array, attr):
+    def calculate_average(self, array, attr):
         total = 0
 
         for instant in array:
@@ -47,21 +47,41 @@ class Day(object):
             'date': self.date,
             'instants': [i.toJSON() for i in self.instants],
             'outdoor_instants': [j.toJSON() for j in self.outdoor_instants],
-            'indoor_temp_avg': self.day_average(self.instants, 'temperature'),
-            'indoor_hum_avg': self.day_average(self.instants, 'humidity'),
-            'outdoor_temp_avg': self.day_average(self.outdoor_instants,
-                                                 'temperature'),
-            'outdoor_hum_avg': self.day_average(self.outdoor_instants,
-                                                'humidity')
+            'indoor_avg_temp': self.calculate_average(
+                self.instants,
+                'temperature'
+            ),
+            'indoor_avg_hum': self.calculate_average(
+                self.instants,
+                'humidity'
+            ),
+            'outdoor_avg_temp': self.calculate_average(
+                self.outdoor_instants,
+                'temperature'
+            ),
+            'outdoor_avg_hum': self.calculate_average(
+                self.outdoor_instants,
+                'humidity'
+            )
         }
 
     def get_averages(self):
         return {
             'date': self.date,
-            'indoor_temp_avg': self.day_average(self.instants, 'temperature'),
-            'indoor_hum_avg': self.day_average(self.instants, 'humidity'),
-            'outdoor_temp_avg': self.day_average(self.outdoor_instants,
-                                                 'temperature'),
-            'outdoor_hum_avg': self.day_average(self.outdoor_instants,
-                                                'humidity')
+            'indoor_temp_avg': self.calculate_average(
+                self.instants,
+                'temperature'
+            ),
+            'indoor_hum_avg': self.calculate_average(
+                self.instants,
+                'humidity'
+            ),
+            'outdoor_temp_avg': self.calculate_average(
+                self.outdoor_instants,
+                'temperature'
+            ),
+            'outdoor_hum_avg': self.calculate_average(
+                self.outdoor_instants,
+                'humidity'
+            )
         }
