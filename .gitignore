@@ -13,4 +13,4 @@ secrets.py
 .cache/
 logs/
 venv/
-
+ve/
