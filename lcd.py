@@ -52,6 +52,11 @@ LCD_CMD = False
 LCD_LINE_1 = 0x80
 LCD_LINE_2 = 0xC0
 
+rows = {
+    1: LCD_LINE_1,
+    2: LCD_LINE_2
+}
+
 # Timing constants
 E_PULSE = 0.00005
 E_DELAY = 0.00005
@@ -80,8 +85,6 @@ class LCD:
 
     def _clean_up(self):
         GPIO.cleanup()
-
-    def _lcd_byte(self, bits, mode):
         # Send byte to data pins
         # bits = data
         # mode = True  for character
@@ -102,13 +105,6 @@ class LCD:
             GPIO.output(LCD_D6, True)
         if bits & 0x80 == 0x80:
             GPIO.output(LCD_D7, True)
-
-        # Toggle 'Enable' pin
-        time.sleep(E_DELAY)
-        GPIO.output(LCD_E, True)
-        time.sleep(E_PULSE)
-        GPIO.output(LCD_E, False)
-        time.sleep(E_DELAY)
 
         # Low bits
         GPIO.output(LCD_D4, False)
@@ -146,30 +142,34 @@ class LCD:
         ret = ''.join(ret)
         return ret
 
-    def _lcd_string(self, message, style):
-        # Send string to display
-        if style == 1:
-            message = message.ljust(LCD_WIDTH, " ")
-        elif style == 2:
-            message = message.center(LCD_WIDTH, " ")
-        elif style == 3:
-            message = message.rjust(LCD_WIDTH, " ")
+    # def _lcd_string(self, message, style):
+    #     # Send string to display
+    #     if style == 1:
+    #         message = message.ljust(LCD_WIDTH, " ")
+    #     elif style == 2:
+    #         message = message.center(LCD_WIDTH, " ")
+    #     elif style == 3:
+    #         message = message.rjust(LCD_WIDTH, " ")
 
+    #     for i in range(LCD_WIDTH):
+    #         self._lcd_byte(ord(message[i]), LCD_CHR)
+
+    def _lcd_string(message, line):
+        message = message.ljust(LCD_WIDTH, " ")
+        self._lcd_byte(line, LCD_CMD)
         for i in range(LCD_WIDTH):
             self._lcd_byte(ord(message[i]), LCD_CHR)
-
-    def send_text(self, text, row=1, justification=2):
+    
+    def send_text(self, message, row=1, justification=2):
         # ROW: send 'text' to row number 1 or 2
         # Justification: left(1), center(2), (3)right
         if (len(text) > 16):
+            # This should be a log
             print "Text not valid. Longer than 16 characters"
-            text = 'ERR:line too long'
-        rows = {
-            1: LCD_LINE_1,
-            2: LCD_LINE_2
-        }
+            mesage = 'ERR:line too long'
+
         self._lcd_byte(rows.get(row, 1), LCD_CMD)
-        self._lcd_string(text, justification)
+        self._lcd_string(text, line)
 
     def blight(self, state):
         GPIO.output(LED_ON, state)
