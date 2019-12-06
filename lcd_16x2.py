@@ -52,7 +52,13 @@ def main():
     GPIO.setup(LCD_D6, GPIO.OUT)  # DB6
     GPIO.setup(LCD_D7, GPIO.OUT)  # DB7
 
-    lcd_init()
+    _lcd_byte(0x33, LCD_CMD)  # 110011 Initialise
+    _lcd_byte(0x32, LCD_CMD)  # 110010 Initialise
+    _lcd_byte(0x06, LCD_CMD)  # 000110 Cursor move direction
+    _lcd_byte(0x0C, LCD_CMD)  # 001100 Display On, Cursor Off,  Blink Off
+    _lcd_byte(0x28, LCD_CMD)  # 101000 Data length,  number of lines,  font size
+    _lcd_byte(0x01, LCD_CMD)  # 000001 Clear display
+    time.sleep(E_DELAY)
 
     while True:
         lcd_string("Rasbperry Pi", LCD_LINE_1)
@@ -67,16 +73,6 @@ def main():
         lcd_string("Follow me on", LCD_LINE_1)
         lcd_string("Twitter @RPiSpy", LCD_LINE_2)
         time.sleep(3)
-
-
-def _lcd_init():
-    lcd_byte(0x33, LCD_CMD)  # 110011 Initialise
-    lcd_byte(0x32, LCD_CMD)  # 110010 Initialise
-    lcd_byte(0x06, LCD_CMD)  # 000110 Cursor move direction
-    lcd_byte(0x0C, LCD_CMD)  # 001100 Display On, Cursor Off,  Blink Off
-    lcd_byte(0x28, LCD_CMD)  # 101000 Data length,  number of lines,  font size
-    lcd_byte(0x01, LCD_CMD)  # 000001 Clear display
-    time.sleep(E_DELAY)
 
 
 def _lcd_byte(bits, mode):
@@ -130,10 +126,10 @@ def lcd_toggle_enable():
 
 def lcd_string(message, line):
     message = message.ljust(LCD_WIDTH, " ")
-    lcd_byte(line, LCD_CMD)
+    _lcd_byte(line, LCD_CMD)
 
     for i in range(LCD_WIDTH):
-        lcd_byte(ord(message[i]), LCD_CHR)
+        _lcd_byte(ord(message[i]), LCD_CHR)
 
 
 if __name__ == '__main__':
@@ -142,6 +138,6 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         pass
     finally:
-        lcd_byte(0x01, LCD_CMD)
+        _lcd_byte(0x01, LCD_CMD)
         lcd_string("Goodbye!", LCD_LINE_1)
         GPIO.cleanup()

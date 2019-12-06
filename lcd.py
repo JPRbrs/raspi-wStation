@@ -83,6 +83,60 @@ class LCD:
         self._lcd_byte(0x01, LCD_CMD)
         self.blight(1)
 
+    def _lcd_byte(self, bits, mode):
+        # Send byte to data pins
+        # bits = data
+        # mode = True  for character
+        #        False for command
+        
+        GPIO.output(LCD_RS, mode)  # RS
+
+        # High bits
+        GPIO.output(LCD_D4, False)
+        GPIO.output(LCD_D5, False)
+        GPIO.output(LCD_D6, False)
+        GPIO.output(LCD_D7, False)
+        if bits & 0x10 == 0x10:
+            GPIO.output(LCD_D4, True)
+        if bits & 0x20 == 0x20:
+            GPIO.output(LCD_D5, True)
+        if bits & 0x40 == 0x40:
+            GPIO.output(LCD_D6, True)
+        if bits & 0x80 == 0x80:
+            GPIO.output(LCD_D7, True)
+
+        self.lcd_toggle_enable()  # Toggle 'Enable' pin
+
+        # Low bits
+        GPIO.output(LCD_D4, False)
+        GPIO.output(LCD_D5, False)
+        GPIO.output(LCD_D6, False)
+        GPIO.output(LCD_D7, False)
+        if bits & 0x01 == 0x01:
+            GPIO.output(LCD_D4, True)
+        if bits & 0x02 == 0x02:
+            GPIO.output(LCD_D5, True)
+        if bits & 0x04 == 0x04:
+            GPIO.output(LCD_D6, True)
+        if bits & 0x08 == 0x08:
+            GPIO.output(LCD_D7, True)
+
+        self.lcd_toggle_enable()  # Toggle 'Enable' pin
+
+    def lcd_toggle_enable(self):
+        time.sleep(E_DELAY)
+        GPIO.output(LCD_E, True)
+        time.sleep(E_PULSE)
+        GPIO.output(LCD_E, False)
+        time.sleep(E_DELAY)
+
+    def lcd_string(self, message, line):
+        message = message.ljust(LCD_WIDTH, " ")
+        self._lcd_byte(line, LCD_CMD)
+        
+        for i in range(LCD_WIDTH):
+            self._lcd_byte(ord(message[i]), LCD_CHR)
+
     def _clean_up(self):
         GPIO.cleanup()
         # Send byte to data pins
@@ -127,55 +181,24 @@ class LCD:
         GPIO.output(LCD_E, False)
         time.sleep(E_DELAY)
 
-    def _displace(self, text):
-        # takes a 16 char string and formats it to show it in movement
-        if len(text) > 16:
-            print ('String cannot be longer than 16 characters')
-            return
-
-        ret = []
-        text = list(text)
-
-        for x in range(1, 16):
-            ret.append(text[x])
-        ret.append(text[0])
-        ret = ''.join(ret)
-        return ret
-
-    # def _lcd_string(self, message, style):
-    #     # Send string to display
-    #     if style == 1:
-    #         message = message.ljust(LCD_WIDTH, " ")
-    #     elif style == 2:
-    #         message = message.center(LCD_WIDTH, " ")
-    #     elif style == 3:
-    #         message = message.rjust(LCD_WIDTH, " ")
-
-    #     for i in range(LCD_WIDTH):
-    #         self._lcd_byte(ord(message[i]), LCD_CHR)
-
-    def _lcd_string(message, line):
-        message = message.ljust(LCD_WIDTH, " ")
-        self._lcd_byte(line, LCD_CMD)
-        for i in range(LCD_WIDTH):
-            self._lcd_byte(ord(message[i]), LCD_CHR)
-    
-    def send_text(self, message, row=1, justification=2):
-        # ROW: send 'text' to row number 1 or 2
-        # Justification: left(1), center(2), (3)right
-        if (len(text) > 16):
-            # This should be a log
-            print "Text not valid. Longer than 16 characters"
-            mesage = 'ERR:line too long'
-
-        self._lcd_byte(rows.get(row, 1), LCD_CMD)
-        self._lcd_string(text, line)
-
     def blight(self, state):
         GPIO.output(LED_ON, state)
 
-    def move(self, seconds, text):
-        for x in range(seconds * 2):
-            self.send_text(text, 1)
-            time.sleep(0.5)
-            text = self._displace(text)
+if __name__ == '__main__':
+    lcd = LCD()
+    lcd._lcd_byte(0x01, LCD_CMD)
+    lcd.lcd_string("Rasbperry Pi", LCD_LINE_1)
+    lcd.lcd_string("16x2 LCD Test", LCD_LINE_2)
+    time.sleep(3)
+    lcd.lcd_string("1234567890123456", LCD_LINE_1)
+    lcd.lcd_string("abcdefghijklmnop", LCD_LINE_2)
+    time.sleep(3)
+    lcd.lcd_string("RaspberryPi-spy", LCD_LINE_1)
+    lcd.lcd_string(".co.uk", LCD_LINE_2)
+    time.sleep(3)
+    lcd.lcd_string("Follow me on", LCD_LINE_1)
+    lcd.lcd_string("Twitter @RPiSpy", LCD_LINE_2)
+    time.sleep(3)
+
+    lcd.lcd_string("Goodbye!", LCD_LINE_1)
+    GPIO.cleanup()
