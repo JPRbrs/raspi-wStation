@@ -34,10 +34,10 @@
 # 15: LCD Backlight +5V**
 # 16: LCD Backlight GND
 
-# import
-import RPi.GPIO as GPIO
 import time
 from datetime import datetime
+
+import RPi.GPIO as GPIO
 from DHT_functions import get_conditions_for_lcd
 
 # Define GPIO to LCD mapping
@@ -63,119 +63,116 @@ E_DELAY = 0.0005
 
 
 def main():
-    lcd_preinit()
-    lcd_init()
-    lcd_switch_on()
+    lcd = LCD()
+    lcd.lcd_preinit()
+    lcd.lcd_init()
+    lcd.lcd_switch_on()
 
-    lcd_string(get_conditions_for_lcd(), LCD_LINE_1)
-    lcd_string(datetime.now().strftime("%H:%M") + " feliz nav", LCD_LINE_2)
+    lcd.lcd_string(get_conditions_for_lcd(), LCD_LINE_1)
+    lcd.lcd_string(datetime.now().strftime("%H:%M") + " feliz nav", LCD_LINE_2)
 
     time.sleep(5)
 
 
-def lcd_switch_on():
-    GPIO.output(LED_ON, True)
+class LCD:
+    def __init__(self):
+        print("initializing...")
 
+    def lcd_switch_on(self):
+        GPIO.output(LED_ON, True)
 
-def lcd_switch_off():
-    GPIO.output(LED_ON, True)
+    def lcd_switch_off(self):
+        GPIO.output(LED_ON, True)
 
+    def cleanup(self):
+        self.lcd_byte(0x01, LCD_CMD)
+        self.lcd_string("Goodbye!", LCD_LINE_1)
+        GPIO.cleanup()
 
-def cleanup():
-    lcd_byte(0x01, LCD_CMD)
-    lcd_string("Goodbye!", LCD_LINE_1)
-    GPIO.cleanup()
+    def lcd_preinit(self):
+        # Main program block
+        GPIO.setwarnings(False)
+        GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbers
+        GPIO.setup(LCD_E, GPIO.OUT)  # E
+        GPIO.setup(LCD_RS, GPIO.OUT)  # RS
+        GPIO.setup(LCD_D4, GPIO.OUT)  # DB4
+        GPIO.setup(LCD_D5, GPIO.OUT)  # DB5
+        GPIO.setup(LCD_D6, GPIO.OUT)  # DB6
+        GPIO.setup(LCD_D7, GPIO.OUT)  # DB7
+        GPIO.setup(LED_ON, GPIO.OUT)  # Backlight enable
 
+    def lcd_init(self):
+        # Initialise display
+        self.lcd_byte(0x33, LCD_CMD)  # 110011 Initialise
+        self.lcd_byte(0x32, LCD_CMD)  # 110010 Initialise
+        self.lcd_byte(0x06, LCD_CMD)  # 000110 Cursor move direction
+        self.lcd_byte(0x0C, LCD_CMD)  # 001100 Display On,Cursor Off, Blink Off
+        self.lcd_byte(0x28, LCD_CMD)  # 101000 Data length, number of lines, font size
+        self.lcd_byte(0x01, LCD_CMD)  # 000001 Clear display
+        time.sleep(E_DELAY)
 
-def lcd_preinit():
-    # Main program block
-    GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbers
-    GPIO.setup(LCD_E, GPIO.OUT)  # E
-    GPIO.setup(LCD_RS, GPIO.OUT)  # RS
-    GPIO.setup(LCD_D4, GPIO.OUT)  # DB4
-    GPIO.setup(LCD_D5, GPIO.OUT)  # DB5
-    GPIO.setup(LCD_D6, GPIO.OUT)  # DB6
-    GPIO.setup(LCD_D7, GPIO.OUT)  # DB7
-    GPIO.setup(LED_ON, GPIO.OUT)  # Backlight enable
+    def lcd_byte(self, bits, mode):
+        # Send byte to data pins
+        # bits = data
+        # mode = True  for character
+        #        False for command
 
+        GPIO.output(LCD_RS, mode)  # RS
 
-def lcd_init():
-    # Initialise display
-    lcd_byte(0x33, LCD_CMD)  # 110011 Initialise
-    lcd_byte(0x32, LCD_CMD)  # 110010 Initialise
-    lcd_byte(0x06, LCD_CMD)  # 000110 Cursor move direction
-    lcd_byte(0x0C, LCD_CMD)  # 001100 Display On,Cursor Off, Blink Off
-    lcd_byte(0x28, LCD_CMD)  # 101000 Data length, number of lines, font size
-    lcd_byte(0x01, LCD_CMD)  # 000001 Clear display
-    time.sleep(E_DELAY)
+        # High bits
+        GPIO.output(LCD_D4, False)
+        GPIO.output(LCD_D5, False)
+        GPIO.output(LCD_D6, False)
+        GPIO.output(LCD_D7, False)
+        if bits & 0x10 == 0x10:
+            GPIO.output(LCD_D4, True)
+        if bits & 0x20 == 0x20:
+            GPIO.output(LCD_D5, True)
+        if bits & 0x40 == 0x40:
+            GPIO.output(LCD_D6, True)
+        if bits & 0x80 == 0x80:
+            GPIO.output(LCD_D7, True)
 
+        # Toggle 'Enable' pin
+        self.lcd_toggle_enable()
 
-def lcd_byte(bits, mode):
-    # Send byte to data pins
-    # bits = data
-    # mode = True  for character
-    #        False for command
+        # Low bits
+        GPIO.output(LCD_D4, False)
+        GPIO.output(LCD_D5, False)
+        GPIO.output(LCD_D6, False)
+        GPIO.output(LCD_D7, False)
+        if bits & 0x01 == 0x01:
+            GPIO.output(LCD_D4, True)
+        if bits & 0x02 == 0x02:
+            GPIO.output(LCD_D5, True)
+        if bits & 0x04 == 0x04:
+            GPIO.output(LCD_D6, True)
+        if bits & 0x08 == 0x08:
+            GPIO.output(LCD_D7, True)
 
-    GPIO.output(LCD_RS, mode)  # RS
+        # Toggle 'Enable' pin
+        self.lcd_toggle_enable()
 
-    # High bits
-    GPIO.output(LCD_D4, False)
-    GPIO.output(LCD_D5, False)
-    GPIO.output(LCD_D6, False)
-    GPIO.output(LCD_D7, False)
-    if bits & 0x10 == 0x10:
-        GPIO.output(LCD_D4, True)
-    if bits & 0x20 == 0x20:
-        GPIO.output(LCD_D5, True)
-    if bits & 0x40 == 0x40:
-        GPIO.output(LCD_D6, True)
-    if bits & 0x80 == 0x80:
-        GPIO.output(LCD_D7, True)
+    def lcd_toggle_enable(self):
+        # Toggle enable
+        time.sleep(E_DELAY)
+        GPIO.output(LCD_E, True)
+        time.sleep(E_PULSE)
+        GPIO.output(LCD_E, False)
+        time.sleep(E_DELAY)
 
-    # Toggle 'Enable' pin
-    lcd_toggle_enable()
+    def lcd_string(self, message, line):
+        # Send string to display
 
-    # Low bits
-    GPIO.output(LCD_D4, False)
-    GPIO.output(LCD_D5, False)
-    GPIO.output(LCD_D6, False)
-    GPIO.output(LCD_D7, False)
-    if bits & 0x01 == 0x01:
-        GPIO.output(LCD_D4, True)
-    if bits & 0x02 == 0x02:
-        GPIO.output(LCD_D5, True)
-    if bits & 0x04 == 0x04:
-        GPIO.output(LCD_D6, True)
-    if bits & 0x08 == 0x08:
-        GPIO.output(LCD_D7, True)
+        message = message.ljust(LCD_WIDTH, " ")
 
-    # Toggle 'Enable' pin
-    lcd_toggle_enable()
+        self.lcd_byte(line, LCD_CMD)
 
-
-def lcd_toggle_enable():
-    # Toggle enable
-    time.sleep(E_DELAY)
-    GPIO.output(LCD_E, True)
-    time.sleep(E_PULSE)
-    GPIO.output(LCD_E, False)
-    time.sleep(E_DELAY)
-
-
-def lcd_string(message, line):
-    # Send string to display
-
-    message = message.ljust(LCD_WIDTH, " ")
-
-    lcd_byte(line, LCD_CMD)
-
-    for i in range(LCD_WIDTH):
-        lcd_byte(ord(message[i]), LCD_CHR)
+        for i in range(LCD_WIDTH):
+            self.lcd_byte(ord(message[i]), LCD_CHR)
 
 
 if __name__ == "__main__":
-
     try:
         main()
     except KeyboardInterrupt:
