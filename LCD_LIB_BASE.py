@@ -16,8 +16,7 @@
 #
 # --------------------------------------
 
-# The wiring for the LCD is as follows in the original script
-# My wirings may diverge, check
+# The wiring for the LCD is as follows:
 # 1 : GND
 # 2 : 5V
 # 3 : Contrast (0-5V)*
@@ -35,8 +34,11 @@
 # 15: LCD Backlight +5V**
 # 16: LCD Backlight GND
 
+# import
 import RPi.GPIO as GPIO
 import time
+from datetime import datetime
+from DHT_functions import get_conditions_for_lcd
 
 # Define GPIO to LCD mapping
 LCD_RS = 7
@@ -60,12 +62,32 @@ E_PULSE = 0.0005
 E_DELAY = 0.0005
 
 
-def get_conditions():
-    humidity, temperature = read_retry(sensor, pin)
-    return str(int(temperature)) + "C and " + str(int(humidity)) + "%"
-
-
 def main():
+    lcd_preinit()
+    lcd_init()
+    lcd_switch_on()
+
+    lcd_string(get_conditions_for_lcd(), LCD_LINE_1)
+    lcd_string(datetime.now().strftime("%H:%M") + " feliz nav", LCD_LINE_2)
+
+    time.sleep(5)
+
+
+def lcd_switch_on():
+    GPIO.output(LED_ON, True)
+
+
+def lcd_switch_off():
+    GPIO.output(LED_ON, True)
+
+
+def cleanup():
+    lcd_byte(0x01, LCD_CMD)
+    lcd_string("Goodbye!", LCD_LINE_1)
+    GPIO.cleanup()
+
+
+def lcd_preinit():
     # Main program block
     GPIO.setwarnings(False)
     GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbers
@@ -77,14 +99,6 @@ def main():
     GPIO.setup(LCD_D7, GPIO.OUT)  # DB7
     GPIO.setup(LED_ON, GPIO.OUT)  # Backlight enable
 
-    # Initialise display
-    lcd_init()
-
-    lcd_string(get_conditions(), LCD_LINE_1)
-    lcd_string(datetime.now().strftime("%H:%M") + " feliz nav", LCD_LINE_2)
-
-    time.sleep(5)
-
 
 def lcd_init():
     # Initialise display
@@ -94,7 +108,6 @@ def lcd_init():
     lcd_byte(0x0C, LCD_CMD)  # 001100 Display On,Cursor Off, Blink Off
     lcd_byte(0x28, LCD_CMD)  # 101000 Data length, number of lines, font size
     lcd_byte(0x01, LCD_CMD)  # 000001 Clear display
-    GPIO.output(LED_ON, True)
     time.sleep(E_DELAY)
 
 
@@ -167,7 +180,3 @@ if __name__ == "__main__":
         main()
     except KeyboardInterrupt:
         pass
-    #finally:
-        #lcd_byte(0x01, LCD_CMD)
-       # lcd_string("Goodbye!", LCD_LINE_1)
-       # GPIO.cleanup()
