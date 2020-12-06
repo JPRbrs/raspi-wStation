@@ -66,11 +66,8 @@ def main():
     lcd = LCD()
     lcd.lcd_switch_on()
 
-    lcd.lcd_string(get_conditions_for_lcd(), LCD_LINE_1)
+    lcd.lcd_string("CACAFUTI", LCD_LINE_1)
     lcd.lcd_string(datetime.now().strftime("%H:%M") + " feliz nav", LCD_LINE_2)
-
-    time.sleep(5)
-
 
 class LCD:
     def __init__(self):
