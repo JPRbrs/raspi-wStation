@@ -40,32 +40,8 @@ from datetime import datetime
 import RPi.GPIO as GPIO
 from DHT_functions import get_conditions_for_lcd
 
-# Define GPIO to LCD mapping
-LCD_RS = 7
-LCD_E = 8
-LCD_D4 = 25
-LCD_D5 = 24
-LCD_D6 = 23
-LCD_D7 = 18
-LED_ON = 15
-
-# Define some device constants
-LCD_WIDTH = 16  # Maximum characters per line
-LCD_CHR = True
-LCD_CMD = False
-
-LCD_LINE_1 = 0x80  # LCD RAM address for the 1st line
-LCD_LINE_2 = 0xC0  # LCD RAM address for the 2nd line
-
-# Timing constants
-E_PULSE = 0.0005
-E_DELAY = 0.0005
-
-
 def main():
     lcd = LCD()
-    lcd.lcd_preinit()
-    lcd.lcd_init()
     lcd.lcd_switch_on()
 
     lcd.lcd_string(get_conditions_for_lcd(), LCD_LINE_1)
@@ -74,9 +50,32 @@ def main():
     time.sleep(5)
 
 
-class LCD:
+class LCD():
+    # Define GPIO to LCD mapping
+    LCD_RS = 7
+    LCD_E = 8
+    LCD_D4 = 25
+    LCD_D5 = 24
+    LCD_D6 = 23
+    LCD_D7 = 18
+    LED_ON = 15
+
+    # Define some device constants
+    LCD_WIDTH = 16  # Maximum characters per line
+    LCD_CHR = True
+    LCD_CMD = False
+
+    LCD_LINE_1 = 0x80  # LCD RAM address for the 1st line
+    LCD_LINE_2 = 0xC0  # LCD RAM address for the 2nd line
+
+    # Timing constants
+    E_PULSE = 0.0005
+    E_DELAY = 0.0005
+
     def __init__(self):
         print("initializing...")
+        self.preinit()
+        self.init()
 
     def lcd_switch_on(self):
         GPIO.output(LED_ON, True)
@@ -89,7 +88,7 @@ class LCD:
         self.lcd_string("Goodbye!", LCD_LINE_1)
         GPIO.cleanup()
 
-    def lcd_preinit(self):
+    def preinit(self):
         # Main program block
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BCM)  # Use BCM GPIO numbers
@@ -101,7 +100,7 @@ class LCD:
         GPIO.setup(LCD_D7, GPIO.OUT)  # DB7
         GPIO.setup(LED_ON, GPIO.OUT)  # Backlight enable
 
-    def lcd_init(self):
+    def lcd(self):
         # Initialise display
         self.lcd_byte(0x33, LCD_CMD)  # 110011 Initialise
         self.lcd_byte(0x32, LCD_CMD)  # 110010 Initialise
