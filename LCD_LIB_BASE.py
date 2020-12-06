@@ -32,7 +32,7 @@
 # 13: Data Bit 6
 # 14: Data Bit 7
 # 15: LCD Backlight +5V**
-# 16: LCD Backlight G
+# 16: LCD Backlight GND
 
 import time
 from datetime import datetime
@@ -40,16 +40,14 @@ from datetime import datetime
 import RPi.GPIO as GPIO
 from DHT_functions import get_conditions_for_lcd
 
-LCD_LINE_1 = 0x80  # LCD RAM address for the 1st line
-LCD_LINE_2 = 0xC0  # LCD RAM address for the 2nd line
-
 
 def main():
     lcd = LCD()
     lcd.lcd_switch_on()
 
-    lcd.lcd_string("CACAFUTI", LCD_LINE_1)
-    lcd.lcd_string(datetime.now().strftime("%H:%M") + " feliz nav", LCD_LINE_2)
+    lcd.lcd_string("SIENA", 1)
+    lcd.lcd_string(datetime.now().strftime("%H:%M") + " feliz nav", 2)
+
 
 class LCD:
     # Define GPIO to LCD mapping
@@ -60,6 +58,9 @@ class LCD:
     LCD_D6 = 23
     LCD_D7 = 18
     LED_ON = 15
+
+    LCD_LINE_1 = 0x80  # LCD RAM address for the 1st line
+    LCD_LINE_2 = 0xC0  # LCD RAM address for the 2nd line
 
     # Define some device constants
     LCD_WIDTH = 16  # Maximum characters per line
@@ -74,11 +75,11 @@ class LCD:
         GPIO.output(self.LED_ON, True)
 
     def lcd_switch_off(self):
-        GPIO.output(self.LED_ON, True)
+        GPIO.output(self.LED_ON, False)
 
     def cleanup(self):
         self.lcd_byte(0x01, self.LCD_CMD)
-        self.lcd_string("Goodbye!", LCD_LINE_1)
+        self.lcd_string("Goodbye!", 1)
         GPIO.cleanup()
 
     def __init__(self):
@@ -153,10 +154,13 @@ class LCD:
 
     def lcd_string(self, message, line):
         # Send string to display
-
         message = message.ljust(self.LCD_WIDTH, " ")
+        lines = {
+            1: self.LCD_LINE_1,
+            2: self.LCD_LINE_2
+        }
 
-        self.lcd_byte(line, self.LCD_CMD)
+        self.lcd_byte(lines[line], self.LCD_CMD)
 
         for i in range(self.LCD_WIDTH):
             self.lcd_byte(ord(message[i]), self.LCD_CHR)
